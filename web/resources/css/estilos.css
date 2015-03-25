@@ -1,0 +1,96 @@
+/* 
+    Created on : 20/03/2015, 14:54:07
+    Author     : Diego Arantes
+*/
+
+/*deixa o cabecalho sempre visivel*/
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+/*Tira a borda */
+.ui-layout-north{
+    border: 0px;
+}
+.ui-layout-south{
+    border: 0px;
+}
+
+/*            .ui-layout-west{
+                border: 0px;
+            }*/
+
+/* Define o tamanho do titulo dos dialogos */
+.ui-widget-content.ui-dialog .ui-dialog-titlebar {
+    padding: 3px 15px !important;
+    border-bottom: 1px solid #eee !important;
+    background-color: #ffffff !important;
+}
+
+/*Corrige a margem do botao fechar */
+.ui-widget-content.ui-dialog .ui-dialog-titlebar-close {
+    margin-top: 0px !important;
+}
+.ui-menu .ui-widget-header h1, 
+.ui-menu .ui-widget-header h2, 
+.ui-menu .ui-widget-header h3, 
+.ui-menu .ui-widget-header h4, 
+.ui-menu .ui-widget-header h5,
+.ui-menu .ui-widget-header h6 {
+    font-size: 12px !important;
+    color: #0088CC !important;
+
+}
+
+/*Imput fields borda reta*/
+.ui-inputfield {
+    border-radius: 0px !important; 
+}
+
+/*Corrige o alinhamento dos itens de menu*/
+.ui-menuitem-link {
+    margin-top: 5px !important;
+}
+
+/*Cor titulo dos paineis*/
+.ui-widget-header {
+    color: #0077b3 !important;
+}
+
+/*Correcao menu*/
+.menu{
+    padding-left: 0 !important;
+    padding-bottom: 1px !important;   
+    padding-top: 0px !important;
+}
+
+.logotipo{ 
+    width: 130px; 
+    height: 37px; 
+    background-image: url('../images/fav.png')!important;
+    padding: 0 !important;
+} 
+
+.imagemLogo{ 
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    margin-right: 15px !important;
+    background-color: rgba(255, 255, 255, 0) !important;
+    opacity: 1 !important;
+}
+
+/*Correcao de fontes do selection*/
+.ui-helper-reset{
+    font-size: 12px !important;
+}
+
+/* Correcao tabs */
+.ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li {
+    border-radius: 0px !important;
+}

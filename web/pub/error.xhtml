@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ABSOFT - ERRO 404</title>
+        <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/favicon.png"/>
+        <style type="text/css">
+            body {
+                background: url("#{facesContext.externalContext.requestContextPath}/resources/images/form_sheetbg.png") repeat scroll 0% 0% #EEE;
+                height: 100%;
+            }
+
+            .ui-dialog.ui-widget-content .ui-dialog-titlebar {
+                padding: 9px 15px;
+                border-bottom: 1px solid #eee;
+                background-color: rgba(53, 68, 71, 0.05);
+            }
+            .ui-dialog-titlebar { display:none !important; }
+        </style>
+    </h:head>
+    <h:body>
+
+        <p:dialog id="dialog"  
+                  modal="false"
+                  minWidth="400"
+                  width="400"
+                  closable="false"
+                  position="center"
+                  widgetVar="modalLogin" 
+                  draggable="false"
+                  resizable="false"
+                  visible="true"
+                  style="border-radius: 0px;">
+
+            <h:panelGrid columns="1" cellpadding="3">
+                <p:outputLabel value="OPS!" style="font-size: 100px; color: #23639A"/> 
+
+                <h:outputText value="Página não encontrada ou sem permissão de acesso!" style="font-size: 30px;"/>
+
+                <p:button href="javascript:history.back(-1);" value="Voltar" icon="ui-icon-circle-arrow-w"/>
+            </h:panelGrid>
+        </p:dialog>  
+
+    </h:body>
+</html>
+
+

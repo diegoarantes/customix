@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ABSOFT - RECUPERAÇÃO DE SENHA</title>
+        <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/favicon.png"/>
+        <style type="text/css">
+            body {
+                background: url("#{facesContext.externalContext.requestContextPath}/resources/images/form_sheetbg.png") repeat scroll 0% 0% #EEE;
+                height: 100%;
+            }
+
+            .ui-dialog.ui-widget-content .ui-dialog-titlebar {
+                padding: 9px 15px;
+                border-bottom: 1px solid #eee;
+                background-color: rgba(53, 68, 71, 0.05);
+            }
+            .ui-dialog-titlebar { display:none !important; }
+        </style>
+
+
+    </h:head>
+    <h:body>
+
+        <p:dialog id="dialog"  
+                  modal="false"
+                  minWidth="400"
+                  width="400"
+                  closable="false"
+                  position="center"
+                  widgetVar="modalLogin" 
+                  draggable="false"
+                  resizable="false"
+                  visible="true"
+                  style="border-radius: 0px;">
+
+
+            <h:form rendered="#{!mbRecuperarSenha.verificaToken()}">
+
+                <p:panel style="border: 0px">
+                    <h:panelGrid columns="2" cellpadding="3">
+                        <p:button href="javascript:history.back(-1);" title="Voltar" style="border: 0px; background: none;" icon="ui-icon-circle-arrow-w"/>
+                        <p:outputLabel value="Recuperação de senha" style="font-size: 15px;"/>
+                    </h:panelGrid>
+
+                    <p:messages closable="true" id="mensagem"/>
+                    <h:panelGrid columns="1" cellpadding="3">
+                        <p:inputText id="email" placeholder="E-Mail" required="true" validator="emailValidator" requiredMessage="Por favor digite o e-mail!" size="40" 
+                                     value="#{mbRecuperarSenha.email}" style="font-size: 13px; height: 20px" autocomplete="off"/>
+                        <p:column/>
+                        <p:captcha label="Captcha" language="pt-BR" theme="white"/>
+                        <p:commandButton value="Enviar" icon="ui-icon-check" style="font-size: 12px" actionListener="#{mbRecuperarSenha.recuperarSenha()}" update="mensagem, email"/>    
+                    </h:panelGrid>
+
+                </p:panel>
+            </h:form>
+
+            <h:form rendered="#{mbRecuperarSenha.verificaToken()}">
+
+                <p:panel style="border: 0px">
+                    <h:panelGrid columns="2" cellpadding="3">
+                        <p:button href="javascript:history.back(-1);" title="Voltar" style="border: 0px; background: none;" icon="ui-icon-circle-arrow-w"/>
+                        <p:outputLabel value="Recuperação de senha" style="font-size: 15px;"/>
+                    </h:panelGrid>
+                    <p:messages closable="true" id="mensagem2"/>
+
+                    <h:panelGrid columns="1" cellpadding="3">
+                        <p:password id="Senha" placeholder="Senha" required="true" requiredMessage="Por favor digite a senha!" size="40" feedback="true"
+                                    value="#{mbRecuperarSenha.usuario.senha}" style="font-size: 13px; height: 20px" autocomplete="off" promptLabel="Digite a nova Senha" weakLabel="Senha Fraca"
+                                    goodLabel="Senha Boa" strongLabel="Senha Forte" converter="converterSHA1"/>
+
+                        <p:password id="cSenha" placeholder="Confirme a Senha" required="true" requiredMessage="Por favor digite a Confirmação!" size="40" feedback="true"
+                                    value="#{mbRecuperarSenha.confirmacao}" style="font-size: 13px; height: 20px" autocomplete="off" promptLabel="Confirme sua Senha" weakLabel="Senha Fraca"
+                                    goodLabel="Senha Boa" strongLabel="Senha Forte" converter="converterSHA1"/>
+                        <p:column/>
+                        <p:commandButton value="Gravar" actionListener="#{mbRecuperarSenha.alteraSenha()}" icon="ui-icon-check" style="font-size: 12px" update="@form"/>    
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:dialog>  
+
+
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="false" draggable="false" closable="false" resizable="false" showHeader="false">
+            <h:outputText value="Aguarde..." style="font-size: 12px" />
+            <br/>
+            <p:graphicImage url="/resources/images/carregando.gif" />
+        </p:dialog>
+
+    </h:body>
+</html>
+
+

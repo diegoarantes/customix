@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>ABSOFT - BASE</title>
+        <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/favicon.png"/>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/estilos.css"/>
+
+        <!-- jS para traducao do calendario  -->
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/js/calendar.js"></script>
+
+        <!--JS que verifica o retorno dos dialogos -->
+        <script type="text/javascript">
+            function sucesso(xhr, status, args, dialogo) {
+                if (args.sucesso) {
+                    PF(dialogo).hide();
+                } else {
+                    PF(dialogo).jq.effect("shake", {times: 5}, 100);
+                }
+            }
+        </script> 
+
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true" >
+
+            <p:layoutUnit position="north" size="45" resizable="false" closable="false" collapsible="false" style="border: 0px; padding: 0px;">
+                <h:form id="formMenu" prependId="false">
+
+
+                    <p:megaMenu style="border-bottom-color: #0088CC; border-bottom-width: 3px; border-top-width: 0px;" class="menu" autoDisplay="false"> 
+                        <p:menuitem icon="logotipo" class="imagemLogo" disabled="true"/> 
+
+                        <p:menuitem value="Home" action="/app/home.jsf" icon="ui-icon-home"/>
+
+                        <p:submenu label="Cadastros" icon="ui-icon-document">
+                            
+                        </p:submenu>
+
+                        <p:submenu label="Configurações" icon="ui-icon-gear">                             
+                            <p:column>
+                                <p:submenu label="Sistema">
+                                    <p:menuitem value="Parâmetros" icon="ui-icon-wrench" />
+                                    <p:menuitem value="Empresas" icon="ui-icon-suitcase" />
+                                </p:submenu>
+                            </p:column>
+
+                            <p:column>
+                                <p:submenu label="Usuário">
+                                    <p:menuitem value="Usuários" icon="ui-icon-person" action="/app/conf/usuarios.jsf"/>
+                                    <p:menuitem value="Permissões" icon="ui-icon-alert" action="/app/conf/permissoes.jsf" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu> 
+
+
+
+                        <p:submenu label="Ajuda" icon="ui-icon-help">  
+
+                            <p:column>
+                                <p:submenu label="Ajuda">
+                                    <p:menuitem value="Sobre o Sistema" onclick="PF('dlgsobre').show();" /> 
+                                </p:submenu>
+                            </p:column>
+
+                        </p:submenu>  
+
+                        <f:facet name="options"> 
+
+                            <p:menuButton value="#{mbLogin.usuarioLogado().getUsuario()}" iconPos="right" style="margin: 5px 0px 0px;">
+                                <p:menuitem value="Informações do Usuário" icon="ui-icon-person" action="/app/user/infoUsuario.jsf"/>
+                                <p:menuitem value="Sair" icon="ui-icon-extlink" action="#{mbLogin.efetuarLogout()}" ajax="false"/>
+                            </p:menuButton>
+                        </f:facet>  
+
+
+                    </p:megaMenu> 
+
+
+                </h:form>  
+
+
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="30" header="ABSoft - Tecnologia" style="text-align: right;" resizable="false" closable="false" collapsible="false">
+
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" rendered="false" resizable="false" closable="false" collapsible="true" collapsed="false">
+                <ui:insert name="submenu" />    
+            </p:layoutUnit>
+
+            <ui:insert name="tarefas" />
+
+
+        </p:layout>
+
+
+
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" modal="false" draggable="false" closable="false" resizable="false" showHeader="false">
+            <h:form>
+                <h:outputText value="Aguarde..." style="font-size: 12px" />
+                <br/>
+                <p:graphicImage url="/resources/images/carregando.gif" />
+            </h:form>
+        </p:dialog>
+
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+            <h:form>
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </h:form>
+        </p:confirmDialog>
+    </h:body>
+</html>
+
