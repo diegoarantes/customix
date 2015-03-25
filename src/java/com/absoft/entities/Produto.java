@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -13,22 +15,52 @@ import javax.persistence.Id;
  */
 @Entity
 public class Produto implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
+    private String sku;
+
+    @NotNull
     private String descricao;
-    
+
+    @NotNull
     private BigDecimal estoque;
-    
-    
+
+    @NotNull
+    private BigDecimal precoVenda;
+
+    @NotNull
+    private BigDecimal custo;
+
+    private String observacao;
+
+    @ManyToOne
+    private Categoria categoria;
+
+    @ManyToOne(optional = false)
+    private UnidadeMedida unidadeMedida;
+
+    @ManyToOne
+    private Pessoa fornecedor;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public String getDescricao() {
@@ -46,9 +78,54 @@ public class Produto implements Serializable {
     public void setEstoque(BigDecimal estoque) {
         this.estoque = estoque;
     }
-    
-    
-    
+
+    public BigDecimal getPrecoVenda() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(BigDecimal precoVenda) {
+        this.precoVenda = precoVenda;
+    }
+
+    public BigDecimal getCusto() {
+        return custo;
+    }
+
+    public void setCusto(BigDecimal custo) {
+        this.custo = custo;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public UnidadeMedida getUnidadeMedida() {
+        return unidadeMedida;
+    }
+
+    public void setUnidadeMedida(UnidadeMedida unidadeMedida) {
+        this.unidadeMedida = unidadeMedida;
+    }
+
+    public Pessoa getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Pessoa fornecedor) {
+        this.fornecedor = fornecedor;
+    }
 
     @Override
     public int hashCode() {
@@ -74,5 +151,5 @@ public class Produto implements Serializable {
     public String toString() {
         return "com.absoft.entities.Produto[ id=" + id + " ]";
     }
-    
+
 }

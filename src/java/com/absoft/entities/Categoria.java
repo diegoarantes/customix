@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.absoft.entities;
 
 import java.io.Serializable;
@@ -9,10 +14,10 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Diego Arantes
+ * @author Diego
  */
 @Entity
-public class Empresa implements Serializable {
+public class Categoria implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -20,7 +25,7 @@ public class Empresa implements Serializable {
     private Long id;
 
     @NotNull
-    private String nomeFantasia;
+    private String categoria;
 
     public Long getId() {
         return id;
@@ -30,12 +35,12 @@ public class Empresa implements Serializable {
         this.id = id;
     }
 
-    public String getNomeFantasia() {
-        return nomeFantasia;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setNomeFantasia(String nomeFantasia) {
-        this.nomeFantasia = nomeFantasia;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     @Override
@@ -48,10 +53,10 @@ public class Empresa implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empresa)) {
+        if (!(object instanceof Categoria)) {
             return false;
         }
-        Empresa other = (Empresa) object;
+        Categoria other = (Categoria) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -60,7 +65,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "com.absoft.entities.Empresa[ id=" + id + " ]";
+        return "com.absoft.entities.Categoria[ id=" + id + " ]";
     }
 
 }

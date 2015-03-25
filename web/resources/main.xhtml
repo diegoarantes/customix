@@ -38,13 +38,29 @@
                         <p:menuitem value="Home" action="/app/home.jsf" icon="ui-icon-home"/>
 
                         <p:submenu label="Cadastros" icon="ui-icon-document">
-                            
+                            <p:column>
+                                <p:submenu label="Cadastros">
+                                    <p:menuitem value="Produtos"/>
+                                    <p:menuitem value="Pessoas"/>
+                                </p:submenu>
+                            </p:column>
+
+                            <p:column>
+                                <p:submenu label="Cadastros Auxiliares">
+                                    <p:menuitem value="Categoria"/>
+                                    <p:menuitem value="Unidade de Medida"/>
+                                    <p:separator/>
+                                    <p:menuitem value="Forma de Pagamento"/>
+                                </p:submenu>
+                            </p:column>
+
                         </p:submenu>
+
+                        <p:menuitem value="Mercado" icon="ui-icon-cart"/>
 
                         <p:submenu label="Configurações" icon="ui-icon-gear">                             
                             <p:column>
                                 <p:submenu label="Sistema">
-                                    <p:menuitem value="Parâmetros" icon="ui-icon-wrench" />
                                     <p:menuitem value="Empresas" icon="ui-icon-suitcase" />
                                 </p:submenu>
                             </p:column>
