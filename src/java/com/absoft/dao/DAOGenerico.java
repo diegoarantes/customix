@@ -16,7 +16,7 @@ import org.hibernate.internal.SessionFactoryImpl;
  */
 @Stateless
 public class DAOGenerico {
-    @PersistenceContext(unitName = "ABSOFT-PU")
+    @PersistenceContext(unitName = "CUSTOMIX-PU")
     private EntityManager em;
 
     public List lista(Class classe) {
