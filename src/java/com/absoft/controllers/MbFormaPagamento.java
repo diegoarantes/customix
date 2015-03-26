@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -16,23 +17,23 @@ import javax.enterprise.context.RequestScoped;
 @Named(value = "mbFormaPagamento")
 @RequestScoped
 public class MbFormaPagamento {
-    
+
     private FormaPagamento formaPagamento = new FormaPagamento();
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
-    
+
     Mensagem msg = new Mensagem();
-    
+
     @EJB
     DAOGenerico dao;
-    
+
     public MbFormaPagamento() {
     }
-    
+
     public void novo() {
         formaPagamento = new FormaPagamento();
         org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
     }
-    
+
     public void editar() {
         if (formaPagamento == null) {
             msg.retornaAdvertencia("Selecione uma Forma de Pagamento!");
@@ -40,7 +41,7 @@ public class MbFormaPagamento {
             org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
         }
     }
-    
+
     public void gravar() {
         if (formaPagamento.getId() == null) {
             dao.inserir(formaPagamento);
@@ -50,8 +51,10 @@ public class MbFormaPagamento {
             msg.retornaInfo("Forma de Pagamento atualizada com sucesso!");
         }
         formaPagamento = new FormaPagamento();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("sucesso", true);
     }
-    
+
     public void excluir() {
         try {
             dao.excluir(formaPagamento);
@@ -61,21 +64,21 @@ public class MbFormaPagamento {
         }
         formaPagamento = new FormaPagamento();
     }
-    
+
     public FormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
-    
+
     public void setFormaPagamento(FormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
-    
+
     public List<FormaPagamento> getFormasPagamento() {
         return dao.lista(FormaPagamento.class);
     }
-    
+
     public void setFormasPagamento(List<FormaPagamento> formasPagamento) {
         this.formasPagamento = formasPagamento;
     }
-    
+
 }

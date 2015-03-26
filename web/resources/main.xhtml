@@ -47,10 +47,10 @@
 
                             <p:column>
                                 <p:submenu label="Cadastros Auxiliares">
-                                    <p:menuitem value="Categoria"/>
-                                    <p:menuitem value="Unidade de Medida"/>
+                                    <p:menuitem value="Categoria" action="/app/cad/categorias.jsf"/>
+                                    <p:menuitem value="Unidade de Medida" action="/app/cad/unidadeMedida.jsf"/>
                                     <p:separator/>
-                                    <p:menuitem value="Forma de Pagamento"/>
+                                    <p:menuitem value="Forma de Pagamento" action="/app/cad/formaPagamento.jsf"/>
                                 </p:submenu>
                             </p:column>
 
@@ -61,7 +61,7 @@
                         <p:submenu label="Configurações" icon="ui-icon-gear">                             
                             <p:column>
                                 <p:submenu label="Sistema">
-                                    <p:menuitem value="Empresas" icon="ui-icon-suitcase" />
+                                    <p:menuitem value="Empresas" icon="ui-icon-suitcase" action="/app/conf/empresas.jsf" />
                                 </p:submenu>
                             </p:column>
 

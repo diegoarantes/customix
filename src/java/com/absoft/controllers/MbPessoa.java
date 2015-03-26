@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -50,6 +51,8 @@ public class MbPessoa {
             msg.retornaInfo("Pesssoa atualizada com sucesso!");
         }
         pessoa = new Pessoa();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("sucesso", true);
     }
 
     public void excluir() {
