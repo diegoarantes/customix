@@ -61,7 +61,7 @@
             </h:form>
 
 
-            <p:dialog widgetVar="dialogo" header="Produto [Edição]" width="380" height="400">
+            <p:dialog widgetVar="dialogo" header="Produto [Edição]" width="380" height="460">
                 <h:form id="formDialog">
                     <h:panelGrid columns="2">
 
@@ -101,9 +101,20 @@
                             <f:selectItem itemLabel="Sim" itemValue="true"/>
                             <f:selectItem itemLabel="Não" itemValue="false"/>
                         </p:selectOneMenu>
+                        
+                        <p:outputLabel  value="Avisa est. baixo ? " />
+                        <p:selectOneMenu value="#{mbProduto.produto.avisaEstoqueBaixo}" required="true">
+                            <f:selectItem itemLabel="Sim" itemValue="true"/>
+                            <f:selectItem itemLabel="Não" itemValue="false"/>
+                        </p:selectOneMenu>
 
                         <p:outputLabel  value="Estoque: " />
                         <p:inputText id="Estoque" value="#{mbProduto.produto.estoque}" size="6" required="true">
+                            <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                        </p:inputText>
+                        
+                        <p:outputLabel  value="Estoque Min: " />
+                        <p:inputText id="EstoqueMin" value="#{mbProduto.produto.estoqueMinimo}" size="6" required="true">
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
                         </p:inputText>
 

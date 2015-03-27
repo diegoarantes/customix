@@ -38,7 +38,13 @@ public class Produto implements Serializable {
     private BigDecimal estoque;
 
     @NotNull
+    private BigDecimal estoqueMinimo;
+
+    @NotNull
     private boolean controlaEstoque;
+
+    @NotNull
+    private boolean avisaEstoqueBaixo;
 
     @NotNull
     private BigDecimal precoVenda;
@@ -161,6 +167,22 @@ public class Produto implements Serializable {
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
+    }
+
+    public BigDecimal getEstoqueMinimo() {
+        return estoqueMinimo;
+    }
+
+    public void setEstoqueMinimo(BigDecimal estoqueMinimo) {
+        this.estoqueMinimo = estoqueMinimo;
+    }
+
+    public boolean isAvisaEstoqueBaixo() {
+        return avisaEstoqueBaixo;
+    }
+
+    public void setAvisaEstoqueBaixo(boolean avisaEstoqueBaixo) {
+        this.avisaEstoqueBaixo = avisaEstoqueBaixo;
     }
 
     @Override

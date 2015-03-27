@@ -11,6 +11,53 @@
 
             <h:form>
                 <p:growl sticky="true"/>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Atualizar" icon="ui-icon-refresh" update="@form"/> 
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:commandButton icon="ui-icon-info" title="Informações" id="info"/>
+                    </f:facet>
+                </p:toolbar>
+                <p:overlayPanel for="info" hideEffect="fade">
+                    <h:outputText value="TESTE INFORMAÇÕES" />
+                </p:overlayPanel>
+
+
+                <p:panel header="Vendas hoje por empresa" toggleable="true"/>
+                <p:panel header="Vendas dos últimos 5 dias" toggleable="true"/>
+                
+                <p:panel toggleable="true" header="Produtos com estoque baixo">
+                    <p:dataTable value="#{mbHome.estoqueBaixo}" var="produto" emptyMessage="Não há itens.">
+                        <p:column headerText="ID" width="30">
+                            #{produto.id}
+                        </p:column>
+                        <p:column headerText="SKU" width="90">
+                            #{produto.sku}
+                        </p:column>                    
+                        <p:column headerText="Descrição">
+                            #{produto.descricao}
+                        </p:column>                    
+                        <p:column headerText="UN" width="40">
+                            #{produto.unidadeMedida.unidade}
+                        </p:column>                    
+                        <p:column headerText="Estoque" width="50">
+                            <h:outputText value="#{produto.estoque}">
+                                <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>                    
+                        <p:column headerText="Estoque Mínimo" width="50">
+                            <h:outputText value="#{produto.estoqueMinimo}">
+                                <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>                    
+                        <p:column headerText="Empresa" width="100">
+                            #{produto.empresa.nomeFantasia}
+                        </p:column>    
+
+                    </p:dataTable>
+                </p:panel>
+
             </h:form>
 
         </p:layoutUnit>
