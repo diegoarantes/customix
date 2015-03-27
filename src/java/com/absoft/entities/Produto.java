@@ -31,6 +31,9 @@ public class Produto implements Serializable {
     private BigDecimal estoque;
 
     @NotNull
+    private boolean controlaEstoque;
+
+    @NotNull
     private BigDecimal precoVenda;
 
     @NotNull
@@ -46,6 +49,9 @@ public class Produto implements Serializable {
 
     @ManyToOne
     private Pessoa fornecedor;
+
+    @ManyToOne(optional = false)
+    private Empresa empresa;
 
     public Long getId() {
         return id;
@@ -77,6 +83,14 @@ public class Produto implements Serializable {
 
     public void setEstoque(BigDecimal estoque) {
         this.estoque = estoque;
+    }
+
+    public boolean isControlaEstoque() {
+        return controlaEstoque;
+    }
+
+    public void setControlaEstoque(boolean controlaEstoque) {
+        this.controlaEstoque = controlaEstoque;
     }
 
     public BigDecimal getPrecoVenda() {
@@ -125,6 +139,14 @@ public class Produto implements Serializable {
 
     public void setFornecedor(Pessoa fornecedor) {
         this.fornecedor = fornecedor;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     @Override
