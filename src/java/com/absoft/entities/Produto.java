@@ -53,6 +53,13 @@ public class Produto implements Serializable {
     @ManyToOne(optional = false)
     private Empresa empresa;
 
+    public Produto() {
+        categoria = new Categoria();
+        unidadeMedida = new UnidadeMedida();
+        fornecedor = new Pessoa();
+        empresa = new Empresa();
+    }
+
     public Long getId() {
         return id;
     }

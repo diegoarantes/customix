@@ -1,6 +1,7 @@
 package com.absoft.controllers;
 
 import com.absoft.dao.DAOGenerico;
+import com.absoft.entities.Pessoa;
 import com.absoft.entities.Produto;
 import com.absoft.util.Mensagem;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class MbProduto {
 
     private Produto produto = new Produto();
     private List<Produto> produtos = new ArrayList<>();
+    private List<Pessoa> fornecedores = new ArrayList<>();
 
     Mensagem msg = new Mensagem();
 
@@ -79,6 +81,14 @@ public class MbProduto {
 
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
+    }
+
+    public List<Pessoa> getFornecedores() {
+        return dao.listaCondicao(Pessoa.class, "cliFor = 'F' OR cliFor = 'A'");
+    }
+
+    public void setFornecedores(List<Pessoa> fornecedores) {
+        this.fornecedores = fornecedores;
     }
 
 }
