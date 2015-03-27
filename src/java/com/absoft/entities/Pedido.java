@@ -51,6 +51,11 @@ public class Pedido implements Serializable {
     @ManyToOne(optional = false)
     private Empresa empresa;
 
+    public Pedido() {
+        cliente = new Pessoa();
+        empresa = new Empresa();
+    }
+
     public Long getId() {
         return id;
     }

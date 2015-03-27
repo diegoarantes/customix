@@ -14,7 +14,7 @@
                     <f:facet name="left">
                         <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbProduto.novo()}" update=":formDialog"/> 
                         <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbProduto.editar()}" update="msg, :formDialog"/> 
-                        <p:commandButton value="Copiar produto" icon="ui-icon-copy" actionListener="#{mbProduto.editar()}" update="msg, :formDialog"/> 
+                        <p:commandButton value="Copiar produto" icon="ui-icon-copy" actionListener="#{mbProduto.copiar()}" update="msg, :formDialog"/> 
                         <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbProduto.excluir()}" update="@form">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir este Produto?" icon="ui-icon-alert" />
                         </p:commandButton> 
@@ -52,7 +52,10 @@
                         R$ <h:outputText value="#{produto.precoVenda}">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
                         </h:outputText>
-                    </p:column>                    
+                    </p:column>     
+                    <p:column headerText="Empresa" width="100">
+                        #{produto.empresa.nomeFantasia}
+                    </p:column>    
 
                 </p:dataTable>
             </h:form>

@@ -36,6 +36,15 @@ public class MbProduto {
         org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
     }
 
+    public void copiar() {
+        if (produto == null) {
+            msg.retornaAdvertencia("Selecione um produto!");
+        } else {
+            produto.setId(null);
+            org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
+        }
+    }
+
     public void editar() {
         if (produto == null) {
             msg.retornaAdvertencia("Selecione um produto!");
@@ -45,16 +54,20 @@ public class MbProduto {
     }
 
     public void gravar() {
-        if (produto.getId() == null) {
-            dao.inserir(produto);
-            msg.retornaInfo("Produto cadastrado com sucesso!");
-        } else {
-            dao.atualizar(produto);
-            msg.retornaInfo("Produto atualizado com sucesso!");
+        try {
+            if (produto.getId() == null) {
+                dao.inserir(produto);
+                msg.retornaInfo("Produto cadastrado com sucesso!");
+            } else {
+                dao.atualizar(produto);
+                msg.retornaInfo("Produto atualizado com sucesso!");
+            }
+            produto = new Produto();
+            RequestContext requestContext = RequestContext.getCurrentInstance();
+            requestContext.addCallbackParam("sucesso", true);
+        } catch (Exception ex) {
+            msg.retornaErro("Este produto já está cadastrado nesta empresa, favor verifique e tente novamente!");
         }
-        produto = new Produto();
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.addCallbackParam("sucesso", true);
     }
 
     public void excluir() {

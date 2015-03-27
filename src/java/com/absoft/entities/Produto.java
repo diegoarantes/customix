@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -14,6 +16,11 @@ import javax.validation.constraints.NotNull;
  * @author Diego Arantes
  */
 @Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"sku", "empresa_id"}, name = "produtoEmpresas")}
+//Define que o valor das colunas juntas devem ser único ex: 1 e 1 nao podera repetir 1 e 1 em outro registro
+//Trava para não ter o produto com o mesmo sku na mesma empresa
+)
 public class Produto implements Serializable {
 
     private static final long serialVersionUID = 1L;
