@@ -23,19 +23,26 @@ public class ItemPedido implements Serializable {
 
     @NotNull
     private BigDecimal quantidade;
-    
+
     @NotNull
     private BigDecimal valorItem;
-    
+
     @NotNull
     private BigDecimal desconto;
-    
+
     @NotNull
     private BigDecimal valorTotal;
 
-
     @ManyToOne(optional = false)
     private Produto produto;
+
+    @ManyToOne(optional = false)
+    private Pedido pedido;
+
+    public ItemPedido() {
+        pedido = new Pedido();
+        produto = new Produto();
+    }
 
     public Long getId() {
         return id;
@@ -83,6 +90,14 @@ public class ItemPedido implements Serializable {
 
     public void setProduto(Produto produto) {
         this.produto = produto;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     @Override

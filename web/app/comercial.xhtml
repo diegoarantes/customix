@@ -2,11 +2,175 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../resources/main.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
 
     <ui:define name="tarefas">
         <p:layoutUnit header="COMERCIAL" position="center" style="padding: 0px">
+            <h:form id="formPrincipal">
+                <p:growl id="msg"/>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbMercado.novo()}" update=":formDialog"/> 
+                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbMercado.editar()}" update="msg, :formDialog"/> 
+                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbMercado.excluir()}" update="@form">
+                            <p:confirm header="Confirmação" message="Deseja realmente excluir este Pedido?" icon="ui-icon-alert" />
+                        </p:commandButton> 
 
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:commandButton icon="ui-icon-info" title="Informações" id="info"/>
+                    </f:facet>
+                </p:toolbar>
+
+                <p:overlayPanel for="info" hideEffect="fade">
+                    <h:outputText value="TESTE INFORMAÇÕES" />
+                </p:overlayPanel>
+
+
+                <p:dataTable value="#{mbMercado.pedidos}" var="pedido" selectionMode="single" selection="#{mbMercado.pedido}" rowKey="#{pedido.id}"  emptyMessage="Não há itens.">
+                    <p:column headerText="ID" width="30">
+                        #{pedido.id}
+                    </p:column>
+                    <p:column headerText="Data" width="76">
+                        <h:outputText value="#{pedido.dataPedido}" converter="javax.faces.DateTime"/>
+                    </p:column>    
+                    <p:column headerText="Cliente">
+                        #{pedido.cliente.nomeRazao}
+                    </p:column>                    
+                    <p:column headerText="Valor Total" width="76">
+                        R$ <h:outputText value="#{pedido.total}">
+                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Usuário" width="70">
+                        #{pedido.usuario.usuario}
+                    </p:column>  
+                    <p:column headerText="Empresa">
+                        #{pedido.empresa.nomeFantasia}
+                    </p:column>  
+                </p:dataTable>
+            </h:form>
+
+
+            <p:dialog widgetVar="dialogo" header="Pedido [Edição]" width="900" height="450">
+                <h:form id="formDialog">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel  value="Cliente: " />
+                        <p:selectOneMenu value="#{mbMercado.pedido.cliente.id}" required="true">
+                            <f:selectItems value="#{mbMercado.clientes}" var="cli" itemLabel="#{cli.nomeRazao}" itemValue="#{cli.id}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:separator/>
+
+                    <h:panelGrid columns="6" cellspacing="5">
+                        <p:outputLabel  value="Produto: " />
+                        <p:outputLabel  value="Quantidade: " />
+                        <p:outputLabel  value="Valor item: " />
+                        <p:outputLabel  value="Desconto: " />
+                        <p:outputLabel  value="Valor total: " />
+                        <p:column/>
+
+                        <p:selectOneMenu value="#{mbMercado.itemPedido.produto.id}" required="true">
+                            <f:selectItems value="#{mbProduto.produtos}" var="pro" itemLabel="#{pro.descricao}" itemValue="#{pro.id}"/>
+                            <p:ajax listener="#{mbMercado.recuperaProduto()}" update="Quantidade, Preco, Desconto, Total"/>
+                        </p:selectOneMenu>
+
+                        <p:inputText id="Quantidade" value="#{mbMercado.itemPedido.quantidade}" size="6" required="true" immediate="true">
+                            <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                            <p:ajax listener="#{mbMercado.recuperaProduto()}" event="keyup" process="@this" update="Preco, Desconto, Total"/>
+                        </p:inputText>
+
+                        <p:inputText id="Preco" value="#{mbMercado.itemPedido.valorItem}" size="6" required="true" readonly="true" style="background-color: #F5F5F5">
+                            <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                        </p:inputText>
+
+                        <p:inputText id="Desconto" value="#{mbMercado.itemPedido.desconto}" size="6" required="true">
+                            <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                            <p:ajax listener="#{mbMercado.recuperaProduto()}" event="keyup" process="@this" update="Quantidade, Preco, Total"/>
+                        </p:inputText>
+
+                        <p:inputText id="Total" value="#{mbMercado.itemPedido.valorTotal}" size="6" required="true" readonly="true" style="background-color: #F5F5F5; font-weight: bold">
+                            <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                        </p:inputText>
+
+                        <p:commandButton icon="ui-icon-plus" update="@form" actionListener="#{mbMercado.adicionaItem()}"/>
+
+                    </h:panelGrid>
+
+                    <p:dataTable id="tblItens" value="#{mbMercado.itensPedido}" var="item" scrollable="true" scrollHeight="240" emptyMessage="Não há itens.">
+                        <p:column headerText="ID" width="30">
+                            #{item.produto.id}
+                        </p:column>
+                        <p:column headerText="Descrição" width="100">
+                            <h:outputText value="#{item.produto.descricao}"/>
+                        </p:column>    
+                        <p:column headerText="Qtd." width="50">
+                            <h:outputText value="#{item.quantidade}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>   
+                        <p:column headerText="Vlr. unit." width="50">
+                            R$ <h:outputText value="#{item.valorItem}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>                  
+                        <p:column headerText="Desc." width="50">
+                            R$ <h:outputText value="#{item.desconto}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>                  
+                        <p:column headerText="Vlr. total" width="50">
+                            R$ <h:outputText value="#{item.valorTotal}">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+
+
+
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="4" style="text-align:right" footerText="Totais:" />
+                                <p:column>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{mbMercado.pedido.desconto}">
+                                            <f:convertNumber currencySymbol="R$ " type="currency" />
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{mbMercado.pedido.total}" style="font-size: 16px; font-weight:bold">
+                                            <f:convertNumber currencySymbol="R$ " type="currency" />
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                            </p:row>
+                        </p:columnGroup>
+                    </p:dataTable>
+
+
+                    <h:inputHidden value="#{mbMercado.pedido.id}"/>
+
+
+
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:commandButton value="Gravar" icon="ui-icon-check" actionListener="#{mbMercado.gravar()}" oncomplete="sucesso(xhr, status, args, 'dialogo')" update="@form, :formPrincipal" />
+                        </f:facet>
+                        <f:facet name="right">
+                            <p:commandButton icon="ui-icon-closethick" value="Sair" type="button" onclick="PF('dialogo').hide()" update=":formPrincipal">
+                                <p:confirm header="Confirmação" message="Deseja realmente cancelar esta operação?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </f:facet>
+
+
+                    </p:toolbar>
+                </h:form>
+            </p:dialog>
         </p:layoutUnit>
     </ui:define>
 

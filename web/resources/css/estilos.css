@@ -9,6 +9,11 @@
     overflow:visible !important;
 }
 
+/*Corrige o cabecalho duplicado na dataTable*/
+.ui-datatable-scrollable-theadclone{
+    display: none !important;
+}
+
 .ui-layout-north .ui-layout-unit-content {
     overflow:visible !important;
 }

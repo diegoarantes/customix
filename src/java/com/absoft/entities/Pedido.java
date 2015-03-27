@@ -51,9 +51,13 @@ public class Pedido implements Serializable {
     @ManyToOne(optional = false)
     private Empresa empresa;
 
+    @ManyToOne
+    private Usuario usuario;
+
     public Pedido() {
         cliente = new Pessoa();
         empresa = new Empresa();
+        usuario = new Usuario();
     }
 
     public Long getId() {
@@ -134,6 +138,14 @@ public class Pedido implements Serializable {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
