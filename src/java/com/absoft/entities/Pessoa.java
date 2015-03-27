@@ -32,7 +32,9 @@ public class Pessoa implements Serializable {
 
     private String celular;
 
-    private String endereco;
+    private String logradouro;
+    
+    private String endNum;
 
     private String cidade;
 
@@ -104,13 +106,23 @@ public class Pessoa implements Serializable {
         this.celular = celular;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getLogradouro() {
+        return logradouro;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
     }
+
+    public String getEndNum() {
+        return endNum;
+    }
+
+    public void setEndNum(String endNum) {
+        this.endNum = endNum;
+    }
+
+
 
     public String getCidade() {
         return cidade;

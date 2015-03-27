@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../resources/main.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="tarefas">
+        <p:layoutUnit header="PESSOAS" position="center" style="padding: 0px">       
+            <h:form id="formPrincipal">
+                <p:growl id="msg"/>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbPessoa.novo()}" update=":formDialog"/> 
+                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbPessoa.editar()}" update="msg, :formDialog"/> 
+                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbPessoa.excluir()}" update="@form">
+                            <p:confirm header="Confirmação" message="Deseja realmente excluir esta Pessoa?" icon="ui-icon-alert" />
+                        </p:commandButton> 
+
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:commandButton icon="ui-icon-info" title="Informações" id="info"/>
+                    </f:facet>
+                </p:toolbar>
+
+                <p:overlayPanel for="info" hideEffect="fade">
+                    <h:outputText value="TESTE INFORMAÇÕES" />
+                </p:overlayPanel>
+
+
+                <p:dataTable value="#{mbPessoa.pessoas}" var="pessoa" selectionMode="single" selection="#{mbPessoa.pessoa}" rowKey="#{pessoa.id}"  emptyMessage="Não há itens.">
+                    <p:column headerText="ID" width="30">
+                        #{pessoa.id}
+                    </p:column>
+                    <p:column headerText="Nome / Razão Social">
+                        #{pessoa.nomeRazao}
+                    </p:column>                    
+                    <p:column headerText="Apelido / Fantasia">
+                        #{pessoa.apelidoFantasia}
+                    </p:column>           
+                    <p:column headerText="Telefone">
+                        #{pessoa.telefone}
+                    </p:column>  
+                    <p:column headerText="Tipo">
+                        #{pessoa.tipo}
+                    </p:column>                    
+                    <p:column headerText="Cliente / Fornecedor">
+                        #{pessoa.cliFor}
+                    </p:column>                    
+                    <p:column headerText="Cidade">
+                        #{pessoa.cidade}
+                    </p:column>                    
+                    <p:column headerText="E-Mail">
+                        #{pessoa.email}
+                    </p:column>                    
+
+                </p:dataTable>
+            </h:form>
+
+
+            <p:dialog widgetVar="dialogo" header="Pessoa [Edição]" width="380" height="100">
+                <h:form id="formDialog">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Pessoa:" />
+                        <p:selectOneRadio value="#{mbPessoa.pessoa.tipo}">
+                            <f:selectItem itemLabel="Física" itemValue="F"/>
+                            <f:selectItem itemLabel="Jurídica" itemValue="J" />
+                        </p:selectOneRadio>
+                        <h:outputLabel value="Nome / Razão: "/>
+                        <p:inputText id="NomeRazao" value="#{mbPessoa.pessoa.nomeRazao}" size="40" onkeyup="this.value = this.value.toUpperCase()" required="true"/>
+
+                        <h:outputLabel value="Apelido / Fantasia: "/>
+                        <p:inputText id="ApelidoFantasia" value="#{mbPessoa.pessoa.apelidoFantasia}" size="40" onkeyup="this.value = this.value.toUpperCase()" required="true"/>
+
+                        <p:outputLabel  value="CPF / CNPJ: " />
+                        <p:inputMask value="#{mbPessoa.pessoa.cpfCnpj}" mask="999.999.999-99"/>
+
+                        <p:outputLabel  value="RG / IE: " />
+                        <p:inputText value="#{mbPessoa.pessoa.rgIe}"/>
+
+                        <p:outputLabel  value="E-Mail: " />
+                        <p:inputText value="#{mbPessoa.pessoa.email}" validator="emailValidator"/>
+
+                        <p:outputLabel  value="Telefone: " />
+                        <p:inputMask value="#{mbPessoa.pessoa.telefone}" mask="(99) 9999-9999"/>
+
+                        <p:outputLabel  value="Celular: " />
+                        <p:inputMask value="#{mbPessoa.pessoa.celular}" mask="(99) 9999-9999"/>
+
+                        <p:outputLabel  value="CEP: " />
+                        <p:inputMask value="#{mbPessoa.pessoa.cep}" mask="99999-999">
+                            <p:ajax event="blur" update="logradouro, cidade, estado" listener="#{mbPessoa.verificaCep()}" />
+                        </p:inputMask>
+
+                        <p:outputLabel value="Logradouro: " />
+                        <p:inputText id="logradouro" value="#{mbPessoa.pessoa.logradouro}" />
+
+                        <p:outputLabel  value="Nº " />
+                        <p:inputText value="#{mbPessoa.pessoa.endNum}" />
+
+                        <p:outputLabel  value="Cidade: " />
+                        <p:inputText id="cidade" value="#{mbPessoa.pessoa.cidade}" />
+
+                        <p:outputLabel value="Estado: " />
+                        <p:selectOneMenu id="estado" value="#{mbPessoa.pessoa.estado}" filterMatchMode="startsWith" filter="true" required="true"
+                                         requiredMessage="Selecione o estado !">
+                            <f:selectItem itemLabel="Selecione o estado." noSelectionOption="true"/>
+                            <f:selectItem itemLabel="AC" itemValue="AC" />
+                            <f:selectItem itemLabel="AL" itemValue="AL" />
+                            <f:selectItem itemLabel="AP" itemValue="AP" />
+                            <f:selectItem itemLabel="AM" itemValue="AM" />
+                            <f:selectItem itemLabel="BA" itemValue="BA" />
+                            <f:selectItem itemLabel="CE" itemValue="CE" />
+                            <f:selectItem itemLabel="DF" itemValue="DF" />
+                            <f:selectItem itemLabel="ES" itemValue="ES" />
+                            <f:selectItem itemLabel="GO" itemValue="GO" />
+                            <f:selectItem itemLabel="MA" itemValue="MA" />
+                            <f:selectItem itemLabel="MT" itemValue="MT" />
+                            <f:selectItem itemLabel="MS" itemValue="MS" />
+                            <f:selectItem itemLabel="MG" itemValue="MG" />
+                            <f:selectItem itemLabel="PR" itemValue="PR" />
+                            <f:selectItem itemLabel="PB" itemValue="PB" />
+                            <f:selectItem itemLabel="PA" itemValue="PA" />
+                            <f:selectItem itemLabel="PE" itemValue="PE" />
+                            <f:selectItem itemLabel="PI" itemValue="PI" />
+                            <f:selectItem itemLabel="RJ" itemValue="RJ" />
+                            <f:selectItem itemLabel="RN" itemValue="RN" />
+                            <f:selectItem itemLabel="RS" itemValue="RS" />
+                            <f:selectItem itemLabel="RO" itemValue="RO" />
+                            <f:selectItem itemLabel="RR" itemValue="RR" />
+                            <f:selectItem itemLabel="SC" itemValue="SC" />
+                            <f:selectItem itemLabel="SE" itemValue="SE" />
+                            <f:selectItem itemLabel="SP" itemValue="SP" />
+                            <f:selectItem itemLabel="TO" itemValue="TO" />
+                        </p:selectOneMenu>    
+
+                        <p:outputLabel  value="Tipo: " />
+                        <p:selectOneRadio value="#{mbPessoa.pessoa.tipo}">
+                            <f:selectItem itemLabel="Cliente" itemValue="C"/>
+                            <f:selectItem itemLabel="Fornecedor" itemValue="F" />
+                            <f:selectItem itemLabel="Ambos" itemValue="A" />
+                        </p:selectOneRadio>
+
+                        <p:outputLabel  value="Observações:: " />
+                        <p:inputTextarea value="#{mbPessoa.pessoa.observacao}"/>
+
+
+                        <h:inputHidden value="#{mbPessoa.pessoa.id}"/>
+                    </h:panelGrid>
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:commandButton value="Gravar" icon="ui-icon-check" actionListener="#{mbPessoa.gravar()}" oncomplete="sucesso(xhr, status, args, 'dialogo')" update="@form, :formPrincipal" />
+                        </f:facet>
+                        <f:facet name="right">
+                            <p:commandButton icon="ui-icon-closethick" value="Sair" type="button" onclick="PF('dialogo').hide()" update=":formPrincipal">
+                                <p:confirm header="Confirmação" message="Deseja realmente cancelar esta operação?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </f:facet>
+                    </p:toolbar>
+                </h:form>
+            </p:dialog>
+
+        </p:layoutUnit>
+    </ui:define>
+
+</ui:composition>

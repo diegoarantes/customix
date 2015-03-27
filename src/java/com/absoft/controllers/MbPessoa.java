@@ -2,6 +2,7 @@ package com.absoft.controllers;
 
 import com.absoft.dao.DAOGenerico;
 import com.absoft.entities.Pessoa;
+import com.absoft.util.WebCepDF;
 import com.absoft.util.Mensagem;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,18 @@ public class MbPessoa {
             msg.retornaErro(ex.getMessage());
         }
         pessoa = new Pessoa();
+    }
+
+    public void verificaCep() {
+        WebCepDF wCep;
+        wCep = new WebCepDF(pessoa.getCep().replace("-", ""));
+
+        if (wCep.getLogradouro() != null) {
+            pessoa.setLogradouro(wCep.getTipoLogradouro() + " " + wCep.getLogradouro());
+            pessoa.setCidade(wCep.getCidade());
+            pessoa.setEstado(wCep.getUf());
+        }
+
     }
 
     public Pessoa getPessoa() {

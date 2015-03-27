@@ -8,12 +8,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Diego Arantes
  */
-public class BuscaCep {
+@XmlRootElement(name = "WebCepDF")
+public class WebCepDF {
 
     @XmlElement(name = "resultado", required = true)
     private String resultado;
@@ -30,13 +32,16 @@ public class BuscaCep {
     @XmlElement(name = "logradouro", required = true)
     private String logradouro;
 
-    public BuscaCep(String cep) {
+    public WebCepDF() {
+    }
+
+    public WebCepDF(String cep) {
         JAXBContext jc;
         try {
-            jc = JAXBContext.newInstance(BuscaCep.class);
+            jc = JAXBContext.newInstance(WebCepDF.class);
             Unmarshaller u = jc.createUnmarshaller();
             URL url = new URL("http://cep.desenvolvefacil.com.br/BuscarCep.php?cep=" + cep + "&ret=xml");
-            BuscaCep wCep = (BuscaCep) u.unmarshal(url);
+            WebCepDF wCep = (WebCepDF) u.unmarshal(url);
 
             this.resultado = wCep.getResultado();
             this.resultadoTxt = wCep.getResultadoTxt();
@@ -47,7 +52,7 @@ public class BuscaCep {
             this.logradouro = wCep.getLogradouro();
 
         } catch (JAXBException | MalformedURLException ex) {
-            Logger.getLogger(BuscaCep.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WebCepDF.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
