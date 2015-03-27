@@ -18,23 +18,24 @@ import org.primefaces.context.RequestContext;
 @Named(value = "mbPessoa")
 @RequestScoped
 public class MbPessoa {
-
+    
     private Pessoa pessoa = new Pessoa();
     private List<Pessoa> pessoas = new ArrayList<>();
-
+    
     Mensagem msg = new Mensagem();
-
+    
     @EJB
     DAOGenerico dao;
-
+    
     public MbPessoa() {
     }
-
+    
     public void novo() {
         pessoa = new Pessoa();
+        pessoa.setTipo('F');
         org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
     }
-
+    
     public void editar() {
         if (pessoa == null) {
             msg.retornaAdvertencia("Selecione uma pessoa!");
@@ -42,7 +43,7 @@ public class MbPessoa {
             org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
         }
     }
-
+    
     public void gravar() {
         if (pessoa.getId() == null) {
             dao.inserir(pessoa);
@@ -55,7 +56,7 @@ public class MbPessoa {
         RequestContext requestContext = RequestContext.getCurrentInstance();
         requestContext.addCallbackParam("sucesso", true);
     }
-
+    
     public void excluir() {
         try {
             dao.excluir(pessoa);
@@ -65,33 +66,34 @@ public class MbPessoa {
         }
         pessoa = new Pessoa();
     }
-
+    
     public void verificaCep() {
         WebCepDF wCep;
         wCep = new WebCepDF(pessoa.getCep().replace("-", ""));
-
+        
         if (wCep.getLogradouro() != null) {
             pessoa.setLogradouro(wCep.getTipoLogradouro() + " " + wCep.getLogradouro());
             pessoa.setCidade(wCep.getCidade());
             pessoa.setEstado(wCep.getUf());
+            pessoa.setBairro(wCep.getBairro());
         }
-
+        
     }
-
+    
     public Pessoa getPessoa() {
         return pessoa;
     }
-
+    
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-
+    
     public List<Pessoa> getPessoas() {
         return dao.lista(Pessoa.class);
     }
-
+    
     public void setPessoas(List<Pessoa> pessoas) {
         this.pessoas = pessoas;
     }
-
+    
 }

@@ -41,6 +41,8 @@ public class Pessoa implements Serializable {
     private String estado;
 
     private String cep;
+    
+    private String bairro;
 
     private String email;
 
@@ -147,6 +149,15 @@ public class Pessoa implements Serializable {
     public void setCep(String cep) {
         this.cep = cep;
     }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+    
 
     public String getEmail() {
         return email;
