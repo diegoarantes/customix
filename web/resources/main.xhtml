@@ -32,25 +32,25 @@
                 <h:form id="formMenu" prependId="false">
 
 
-                    <p:megaMenu style="border-bottom-color: #0088CC; border-bottom-width: 3px; border-top-width: 0px;" class="menu" autoDisplay="false"> 
+                    <p:megaMenu style="border-bottom-color: #000; border-bottom-width: 3px; border-top-width: 0px;" class="menu" autoDisplay="false"> 
                         <p:menuitem icon="logotipo" class="imagemLogo" disabled="true"/> 
 
-                        <p:menuitem value="Home" action="/app/home.jsf" icon="ui-icon-home"/>
+                        <p:menuitem value="Home" action="/app/home.jsf" icon="ui-icon-home" ajax="false"/>
 
                         <p:submenu label="Cadastros" icon="ui-icon-document">
                             <p:column>
                                 <p:submenu label="Cadastros">
-                                    <p:menuitem value="Produtos" action="/app/cad/produtos.jsf"/>
-                                    <p:menuitem value="Pessoas" action="/app/cad/pessoas.jsf"/>
+                                    <p:menuitem value="Produtos" action="/app/cad/produtos.jsf" ajax="false"/>
+                                    <p:menuitem value="Pessoas" action="/app/cad/pessoas.jsf" ajax="false"/>
                                 </p:submenu>
                             </p:column>
 
                             <p:column>
                                 <p:submenu label="Cadastros Auxiliares">
-                                    <p:menuitem value="Categoria" action="/app/cad/categorias.jsf"/>
-                                    <p:menuitem value="Unidade de Medida" action="/app/cad/unidadeMedida.jsf"/>
+                                    <p:menuitem value="Categoria" action="/app/cad/categorias.jsf" ajax="false"/>
+                                    <p:menuitem value="Unidade de Medida" action="/app/cad/unidadeMedida.jsf" ajax="false"/>
                                     <p:separator/>
-                                    <p:menuitem value="Forma de Pagamento" action="/app/cad/formaPagamento.jsf"/>
+                                    <p:menuitem value="Forma de Pagamento" action="/app/cad/formaPagamento.jsf" ajax="false"/>
                                 </p:submenu>
                             </p:column>
 
@@ -61,14 +61,14 @@
                         <p:submenu label="Configurações" icon="ui-icon-gear">                             
                             <p:column>
                                 <p:submenu label="Sistema">
-                                    <p:menuitem value="Empresas" icon="ui-icon-suitcase" action="/app/conf/empresas.jsf" />
+                                    <p:menuitem value="Empresas" icon="ui-icon-suitcase" action="/app/conf/empresas.jsf" ajax="false" />
                                 </p:submenu>
                             </p:column>
 
                             <p:column>
                                 <p:submenu label="Usuário">
-                                    <p:menuitem value="Usuários" icon="ui-icon-person" action="/app/conf/usuarios.jsf"/>
-                                    <p:menuitem value="Permissões" icon="ui-icon-alert" action="/app/conf/permissoes.jsf" />
+                                    <p:menuitem value="Usuários" icon="ui-icon-person" action="/app/conf/usuarios.jsf" ajax="false"/>
+                                    <p:menuitem value="Permissões" icon="ui-icon-alert" action="/app/conf/permissoes.jsf" ajax="false"/>
                                 </p:submenu>
                             </p:column>
                         </p:submenu> 

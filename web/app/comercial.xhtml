@@ -57,10 +57,16 @@
 
             <p:dialog widgetVar="dialogo" header="Pedido [Edição]" width="900" height="450">
                 <h:form id="formDialog">
-                    <h:panelGrid columns="2">
+                    <p:growl/>
+                    <h:panelGrid columns="4">
                         <p:outputLabel  value="Cliente: " />
-                        <p:selectOneMenu value="#{mbMercado.pedido.cliente.id}" required="true">
+                        <p:selectOneMenu value="#{mbMercado.pedido.cliente.id}" required="true" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="Selecione um cliente." noSelectionOption="true"/>
                             <f:selectItems value="#{mbMercado.clientes}" var="cli" itemLabel="#{cli.nomeRazao}" itemValue="#{cli.id}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel  value="Empresa: " />
+                        <p:selectOneMenu value="#{mbMercado.pedido.empresa.id}" required="true" filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemLabel="#{emp.nomeFantasia}" itemValue="#{emp.id}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
                     <p:separator/>
@@ -73,10 +79,13 @@
                         <p:outputLabel  value="Valor total: " />
                         <p:column/>
 
-                        <p:selectOneMenu value="#{mbMercado.itemPedido.produto.id}" required="true">
-                            <f:selectItems value="#{mbProduto.produtos}" var="pro" itemLabel="#{pro.descricao}" itemValue="#{pro.id}"/>
+                        <p:selectOneMenu value="#{mbMercado.itemPedido.produto.id}" required="true" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="Selecione um produto." noSelectionOption="true"/>
+                            <f:selectItems value="#{mbProduto.produtos}" var="pro" itemLabel="#{pro.sku} - #{pro.descricao}" itemValue="#{pro.id}"/>
                             <p:ajax listener="#{mbMercado.recuperaProduto()}" update="Quantidade, Preco, Desconto, Total"/>
                         </p:selectOneMenu>
+
+
 
                         <p:inputText id="Quantidade" value="#{mbMercado.itemPedido.quantidade}" size="6" required="true" immediate="true">
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
@@ -87,7 +96,7 @@
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
                         </p:inputText>
 
-                        <p:inputText id="Desconto" value="#{mbMercado.itemPedido.desconto}" size="6" required="true">
+                        <p:inputText id="Desconto" value="#{mbMercado.itemPedido.desconto}" size="6" required="true" readonly="true" >
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
                             <p:ajax listener="#{mbMercado.recuperaProduto()}" event="keyup" process="@this" update="Quantidade, Preco, Total"/>
                         </p:inputText>
@@ -100,14 +109,14 @@
 
                     </h:panelGrid>
 
-                    <p:dataTable id="tblItens" value="#{mbMercado.itensPedido}" var="item" scrollable="true" scrollHeight="240" emptyMessage="Não há itens.">
+                    <p:dataTable id="tblItens" value="#{mbMercado.itensPedido}" var="item" emptyMessage="Não há itens." style="height: 300px">
                         <p:column headerText="ID" width="30">
                             #{item.produto.id}
                         </p:column>
                         <p:column headerText="Descrição" width="100">
                             <h:outputText value="#{item.produto.descricao}"/>
                         </p:column>    
-                        <p:column headerText="Qtd." width="50">
+                        <p:column headerText="Qtd." width="30">
                             <h:outputText value="#{item.quantidade}">
                                 <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
                             </h:outputText>
@@ -127,8 +136,11 @@
                                 <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
                             </h:outputText>
                         </p:column>
-
-
+                        <p:column width="2">
+                            <p:commandLink value="X" title="Excluir item" action="#{mbMercado.excluirItem()}" process="@this" update="@form:tblItens">
+                                <f:setPropertyActionListener value="#{item}" target="#{mbMercado.itemSelecionado}"/>
+                            </p:commandLink>
+                        </p:column>
 
                         <p:columnGroup type="footer">
                             <p:row>
@@ -148,6 +160,12 @@
                                         </h:outputText>
                                     </f:facet>
                                 </p:column>
+
+                                <p:column>
+                                    <f:facet name="footer">
+
+                                    </f:facet>
+                                </p:column>
                             </p:row>
                         </p:columnGroup>
                     </p:dataTable>
@@ -159,7 +177,7 @@
 
                     <p:toolbar>
                         <f:facet name="left">
-                            <p:commandButton value="Gravar" icon="ui-icon-check" actionListener="#{mbMercado.gravar()}" oncomplete="sucesso(xhr, status, args, 'dialogo')" update="@form, :formPrincipal" />
+                            <p:commandButton value="Gravar" icon="ui-icon-check" actionListener="#{mbMercado.gravar()}" oncomplete="sucesso(xhr, status, args, 'dialogo')" update=":formPrincipal" process="@this"/>
                         </f:facet>
                         <f:facet name="right">
                             <p:commandButton icon="ui-icon-closethick" value="Sair" type="button" onclick="PF('dialogo').hide()" update=":formPrincipal">
