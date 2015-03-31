@@ -12,9 +12,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import org.primefaces.model.chart.LineChartModel;
 
 /**
  *
@@ -38,8 +40,15 @@ public class MbHome {
 
     @EJB
     DAOGenerico dao;
+    
+    private LineChartModel graficoFaturamento;
 
     public MbHome() {
+    }
+    
+     @PostConstruct
+    public void init() {
+        createLineModels();
     }
 
     public List<Produto> getEstoqueBaixo() {
@@ -160,4 +169,17 @@ public class MbHome {
         return dia5;
     }
 
+    public LineChartModel getGraficoFaturamento() {
+        return graficoFaturamento;
+    }
+
+    private void createLineModels() {
+ 
+    }
+
+
+    
+    
+    
+    
 }
