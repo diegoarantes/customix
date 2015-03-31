@@ -15,9 +15,13 @@
                     <f:facet name="left">
                         <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbMercado.novo()}" update=":formDialog"/> 
                         <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbMercado.editar()}" update="msg, :formDialog"/> 
+                        <p:commandButton value="Imprimir" icon="ui-icon-print"/> 
+                        <p:commandButton value="Relatório" icon="ui-icon-clipboard"/> 
                         <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbMercado.excluir()}" update="@form">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir este Pedido?" icon="ui-icon-alert" />
                         </p:commandButton> 
+
+
 
                     </f:facet>
                     <f:facet name="right">
