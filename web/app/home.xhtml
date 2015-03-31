@@ -24,9 +24,23 @@
                 </p:overlayPanel>
 
 
-                <p:panel header="Vendas hoje por empresa" toggleable="true"/>
+                <p:panel header="Vendas hoje por empresa" toggleable="true">
+                    <p:dataTable value="#{mbEmpresa.empresas}" var="emp" emptyMessage="Não há itens.">
+                        <p:column headerText="ID" width="30">
+                            #{emp.id}
+                        </p:column>
+                        <p:column headerText="Empresa" width="200">
+                            #{emp.nomeFantasia}
+                        </p:column>
+                        <p:column headerText="Total Faturado" width="90">
+                            R$ <h:outputText value="#{mbHome.faturamentoHoje(emp)}" style="font-weight: bold;">
+                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
                 <p:panel header="Vendas dos últimos 5 dias" toggleable="true"/>
-                
+
                 <p:panel toggleable="true" header="Produtos com estoque baixo">
                     <p:dataTable value="#{mbHome.estoqueBaixo}" var="produto" emptyMessage="Não há itens.">
                         <p:column headerText="ID" width="30">
