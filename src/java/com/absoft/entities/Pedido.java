@@ -54,10 +54,14 @@ public class Pedido implements Serializable {
     @ManyToOne
     private Usuario usuario;
 
+    @ManyToOne
+    private FormaPagamento formaPagamento;
+
     public Pedido() {
         cliente = new Pessoa();
         empresa = new Empresa();
         usuario = new Usuario();
+        formaPagamento = new FormaPagamento();
     }
 
     public Long getId() {
@@ -146,6 +150,14 @@ public class Pedido implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
 
     @Override

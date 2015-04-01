@@ -56,6 +56,9 @@
                     <p:column headerText="Usuário" width="70">
                         #{pedido.usuario.usuario}
                     </p:column>  
+                    <p:column headerText="Forma de Pagamento" width="150">
+                        #{pedido.formaPagamento.formaPagamento}
+                    </p:column>  
                     <p:column headerText="Empresa">
                         #{pedido.empresa.nomeFantasia}
                     </p:column>  
@@ -66,16 +69,21 @@
             <p:dialog widgetVar="dialogo" header="Pedido [Edição]" width="900" height="450">
                 <h:form id="formDialog">
                     <p:growl/>
-                    <h:panelGrid columns="6" cellspacing="5">
+                    <h:panelGrid columns="8" cellspacing="5">
                         <p:outputLabel  value="Cliente: " />
                         <p:selectOneMenu value="#{mbMercado.pedido.cliente.id}" required="true" filter="true" filterMatchMode="contains" style="width: 250px">
                             <f:selectItem itemLabel="Selecione um cliente." noSelectionOption="true"/>
                             <f:selectItems value="#{mbMercado.clientes}" var="cli" itemLabel="#{cli.nomeRazao}" itemValue="#{cli.id}"/>
                         </p:selectOneMenu>
 
+                        <p:outputLabel  value="Forma Pag. " />
+                        <p:selectOneMenu value="#{mbMercado.pedido.formaPagamento.id}" required="true" style="width: 150px">
+                            <f:selectItems value="#{mbFormaPagamento.formasPagamento}" var="frm" itemLabel="#{frm.formaPagamento}" itemValue="#{frm.id}"/>
+                        </p:selectOneMenu>
+
 
                         <p:inputText value="#{mbMercado.pedido.usuario.usuario}" readonly="true" style="background-color: #F5F5F5" size="10"/>
-                        <p:spacer width="255" height="1"/>
+
                         <p:outputLabel  value="Empresa: " />
                         <p:selectOneMenu value="#{mbMercado.pedido.empresa.id}" required="true" style="width: 130px">
                             <f:selectItem itemLabel="Sel. uma empresa." noSelectionOption="true"/>
