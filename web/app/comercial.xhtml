@@ -38,7 +38,7 @@
                 </p:overlayPanel>
 
 
-                <p:dataTable value="#{mbMercado.pedidos}" var="pedido" selectionMode="single" selection="#{mbMercado.pedido}" rowKey="#{pedido.id}"  emptyMessage="Não há itens.">
+                <p:dataTable widgetVar="tabelaPedidos" value="#{mbMercado.pedidos}" var="pedido" selectionMode="single" selection="#{mbMercado.pedido}" rowKey="#{pedido.id}"  emptyMessage="Não há itens.">
                     <p:column headerText="ID" width="30">
                         #{pedido.id}
                     </p:column>
@@ -53,6 +53,16 @@
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
                         </h:outputText>
                     </p:column>
+                    <p:column headerText="Status" width="80" filterBy="#{pedido.aberto}" filterMatchMode="exact">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tabelaPedidos').filter()" >
+                                <f:selectItem itemLabel="Sel. Status" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemValue="true" itemLabel="Em Aberto"/>
+                                <f:selectItem itemValue="False" itemLabel="Fechado"/>
+                            </p:selectOneMenu>
+                        </f:facet>
+                        #{pedido.aberto ? "Em Aberto" : "Fechado"} 
+                    </p:column>  
                     <p:column headerText="Usuário" width="70">
                         #{pedido.usuario.usuario}
                     </p:column>  

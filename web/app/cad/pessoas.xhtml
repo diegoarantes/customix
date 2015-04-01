@@ -33,10 +33,10 @@
                     <p:column headerText="ID" width="30">
                         #{pessoa.id}
                     </p:column>
-                    <p:column headerText="Nome / Razão Social">
+                    <p:column headerText="Nome / Razão Social" filterBy="#{pessoa.nomeRazao}" filterMatchMode="contains">
                         #{pessoa.nomeRazao}
                     </p:column>                    
-                    <p:column headerText="Apelido / Fantasia">
+                    <p:column headerText="Apelido / Fantasia" filterBy="#{pessoa.apelidoFantasia}" filterMatchMode="contains">
                         #{pessoa.apelidoFantasia}
                     </p:column>           
                     <p:column headerText="Telefone">

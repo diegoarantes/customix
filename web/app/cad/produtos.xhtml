@@ -31,14 +31,14 @@
                 </p:overlayPanel>
 
 
-                <p:dataTable value="#{mbProduto.produtos}" var="produto" selectionMode="single" selection="#{mbProduto.produto}" rowKey="#{produto.id}"  emptyMessage="Não há itens.">
+                <p:dataTable widgetVar="tabelaProdutos" value="#{mbProduto.produtos}" var="produto" selectionMode="single" selection="#{mbProduto.produto}" rowKey="#{produto.id}"  emptyMessage="Não há itens.">
                     <p:column headerText="ID" width="30">
                         #{produto.id}
                     </p:column>
-                    <p:column headerText="SKU" width="90">
+                    <p:column headerText="SKU" width="95" filterBy="#{produto.sku}" filterMatchMode="contains"> 
                         #{produto.sku}
                     </p:column>                    
-                    <p:column headerText="Descrição">
+                    <p:column headerText="Descrição" filterBy="#{produto.descricao}" filterMatchMode="contains">
                         #{produto.descricao}
                     </p:column>                    
                     <p:column headerText="UN" width="40">
@@ -54,7 +54,13 @@
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
                         </h:outputText>
                     </p:column>     
-                    <p:column headerText="Empresa" width="100">
+                    <p:column headerText="Empresa" width="130" filterBy="#{produto.empresa.nomeFantasia}" filterMatchMode="exact">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tabelaProdutos').filter()" >
+                                <f:selectItem itemLabel="Sel. Empresa" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemValue="#{emp.nomeFantasia}" itemLabel="#{emp.nomeFantasia}"/>
+                            </p:selectOneMenu>
+                        </f:facet>
                         #{produto.empresa.nomeFantasia}
                     </p:column>    
 
@@ -102,7 +108,7 @@
                             <f:selectItem itemLabel="Sim" itemValue="true"/>
                             <f:selectItem itemLabel="Não" itemValue="false"/>
                         </p:selectOneMenu>
-                        
+
                         <p:outputLabel  value="Avisa est. baixo ? " />
                         <p:selectOneMenu value="#{mbProduto.produto.avisaEstoqueBaixo}" required="true">
                             <f:selectItem itemLabel="Sim" itemValue="true"/>
@@ -113,7 +119,7 @@
                         <p:inputText id="Estoque" value="#{mbProduto.produto.estoque}" size="6" required="true">
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
                         </p:inputText>
-                        
+
                         <p:outputLabel  value="Estoque Min: " />
                         <p:inputText id="EstoqueMin" value="#{mbProduto.produto.estoqueMinimo}" size="6" required="true">
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
