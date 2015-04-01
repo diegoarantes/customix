@@ -32,6 +32,8 @@ public class MbMercado implements Serializable {
     private List<Pedido> pedidos = new ArrayList<>();
 
     private List<Pessoa> clientes = new ArrayList<>();
+    
+    private List<Produto> produtos = new ArrayList<>();
 
     Mensagem msg = new Mensagem();
 
@@ -46,6 +48,9 @@ public class MbMercado implements Serializable {
         pedido.setDesconto(BigDecimal.ZERO);
         pedido.setTotal(BigDecimal.ZERO);
         pedido.setValor(BigDecimal.ZERO);
+        
+        pedido.setUsuario(new MbLogin().usuarioLogado());
+        
         itemPedido = new ItemPedido();
 
         itemPedido.setQuantidade(BigDecimal.ONE);
@@ -73,7 +78,7 @@ public class MbMercado implements Serializable {
                 pedido.setDataPedido(new Date());
                 pedido.setHora(new Date());
                 pedido.setAberto(false);
-                pedido.setUsuario(new MbLogin().usuarioLogado());
+                
 
                 dao.inserir(pedido);
                 gravaItens();
@@ -239,6 +244,16 @@ public class MbMercado implements Serializable {
         this.clientes = clientes;
     }
 
+    public List<Produto> getProdutos() {
+        return dao.listaCondicao(Produto.class, "empresa.id = " + pedido.getEmpresa().getId());
+    }
+
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos = produtos;
+    }
+
+    
+    
     public ItemPedido getItemSelecionado() {
         return itemSelecionado;
     }

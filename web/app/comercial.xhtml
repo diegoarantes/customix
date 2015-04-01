@@ -15,8 +15,12 @@
                     <f:facet name="left">
                         <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbMercado.novo()}" update=":formDialog"/> 
                         <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbMercado.editar()}" update="msg, :formDialog"/> 
-                        <p:commandButton value="Imprimir" icon="ui-icon-print"/> 
-                        <p:commandButton value="Relatório" icon="ui-icon-clipboard"/> 
+                        <p:commandButton value="Imprimir" icon="ui-icon-print" ajax="false" onclick="form.target = '_blank'">
+                            <f:setPropertyActionListener value="#{mbMercado.pedido}" target="#{mbRelatorio.pedido}"/>
+                            <f:actionListener binding="#{mbRelatorio.relatorioPedido()}"/>
+                        </p:commandButton> 
+                        <p:commandButton value="Relatório" icon="ui-icon-clipboard" >                  
+                        </p:commandButton> 
                         <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbMercado.excluir()}" update="@form">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir este Pedido?" icon="ui-icon-alert" />
                         </p:commandButton> 
@@ -62,15 +66,21 @@
             <p:dialog widgetVar="dialogo" header="Pedido [Edição]" width="900" height="450">
                 <h:form id="formDialog">
                     <p:growl/>
-                    <h:panelGrid columns="4">
+                    <h:panelGrid columns="6" cellspacing="5">
                         <p:outputLabel  value="Cliente: " />
-                        <p:selectOneMenu value="#{mbMercado.pedido.cliente.id}" required="true" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu value="#{mbMercado.pedido.cliente.id}" required="true" filter="true" filterMatchMode="contains" style="width: 250px">
                             <f:selectItem itemLabel="Selecione um cliente." noSelectionOption="true"/>
                             <f:selectItems value="#{mbMercado.clientes}" var="cli" itemLabel="#{cli.nomeRazao}" itemValue="#{cli.id}"/>
                         </p:selectOneMenu>
+
+
+                        <p:inputText value="#{mbMercado.pedido.usuario.usuario}" readonly="true" style="background-color: #F5F5F5" size="10"/>
+                        <p:spacer width="255" height="1"/>
                         <p:outputLabel  value="Empresa: " />
-                        <p:selectOneMenu value="#{mbMercado.pedido.empresa.id}" required="true" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu value="#{mbMercado.pedido.empresa.id}" required="true" style="width: 130px">
+                            <f:selectItem itemLabel="Sel. uma empresa." noSelectionOption="true"/>
                             <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemLabel="#{emp.nomeFantasia}" itemValue="#{emp.id}"/>
+                            <p:ajax update="Produto"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
                     <p:separator/>
@@ -83,9 +93,9 @@
                         <p:outputLabel  value="Valor total: " />
                         <p:column/>
 
-                        <p:selectOneMenu value="#{mbMercado.itemPedido.produto.id}" required="true" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="Produto" value="#{mbMercado.itemPedido.produto.id}" required="true" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="Selecione um produto." noSelectionOption="true"/>
-                            <f:selectItems value="#{mbProduto.produtos}" var="pro" itemLabel="#{pro.sku} - #{pro.descricao}" itemValue="#{pro.id}"/>
+                            <f:selectItems value="#{mbMercado.produtos}" var="pro" itemLabel="#{pro.sku} - #{pro.descricao}" itemValue="#{pro.id}"/>
                             <p:ajax listener="#{mbMercado.recuperaProduto()}" update="Quantidade, Preco, Desconto, Total"/>
                         </p:selectOneMenu>
 
@@ -96,7 +106,7 @@
                             <p:ajax listener="#{mbMercado.recuperaProduto()}" event="keyup" process="@this" update="Preco, Desconto, Total"/>
                         </p:inputText>
 
-                        <p:inputText id="Preco" value="#{mbMercado.itemPedido.valorItem}" size="6" required="true" readonly="true" style="background-color: #F5F5F5">
+                        <p:inputText id="Preco" value="#{mbMercado.itemPedido.valorItem}" size="6" readonly="true" style="background-color: #F5F5F5">
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
                         </p:inputText>
 
@@ -113,7 +123,7 @@
 
                     </h:panelGrid>
 
-                    <p:dataTable id="tblItens" value="#{mbMercado.itensPedido}" var="item" emptyMessage="Não há itens." style="height: 300px">
+                    <p:dataTable id="tblItens" value="#{mbMercado.itensPedido}" var="item" emptyMessage="Não há itens." style="height: 298px">
                         <p:column headerText="ID" width="30">
                             #{item.produto.id}
                         </p:column>
