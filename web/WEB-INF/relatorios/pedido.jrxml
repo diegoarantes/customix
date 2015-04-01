@@ -44,7 +44,6 @@ FROM
      INNER JOIN `pessoa` pessoa ON pedido.`cliente_id` = pessoa.`id`
      INNER JOIN `itempedido` itempedido ON pedido.`id` = itempedido.`pedido_id`
      INNER JOIN `produto` produto ON itempedido.`produto_id` = produto.`id`
-     AND pessoa.`id` = produto.`fornecedor_id`
      AND empresa.`id` = produto.`empresa_id`
      INNER JOIN `unidademedida` unidademedida ON produto.`unidadeMedida_id` = unidademedida.`id`
 WHERE
