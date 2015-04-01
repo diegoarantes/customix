@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pedido" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="2833a868-6438-4ee7-9cda-b5072826f32a">
+	<property name="ireport.zoom" value="2.000000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dtInicial" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dtFinal" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="aberto" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     pedido.`aberto` AS pedido_aberto,
+     pedido.`dataPedido` AS pedido_dataPedido,
+     pedido.`desconto` AS pedido_desconto,
+     pedido.`hora` AS pedido_hora,
+     pedido.`total` AS pedido_total,
+     pedido.`valor` AS pedido_valor,
+     pedido.`formaPagamento_id` AS pedido_formaPagamento_id,
+     pedido.`id` AS pedido_id,
+     empresa.`nomeFantasia` AS empresa_nomeFantasia,
+     usuario.`usuario` AS usuario_usuario,
+     formapagamento.`formaPagamento` AS formapagamento_formaPagamento,
+     pessoa.`nomeRazao` AS pessoa_nomeRazao,
+     pedido.`empresa_id` AS pedido_empresa_id
+FROM
+     `pessoa` pessoa INNER JOIN `pedido` pedido ON pessoa.`id` = pedido.`cliente_id`
+     INNER JOIN `empresa` empresa ON pedido.`empresa_id` = empresa.`id`
+     INNER JOIN `usuario` usuario ON pedido.`usuario_id` = usuario.`id`
+     INNER JOIN `formapagamento` formapagamento ON pedido.`formaPagamento_id` = formapagamento.`id`
+WHERE
+pedido.`empresa_id` = $P{empresa}
+AND
+pedido.`aberto` = $P{aberto}
+AND
+pedido.`dataPedido` BETWEEN $P{dtInicial} AND $P{dtFinal}]]>
+	</queryString>
+	<field name="pedido_aberto" class="java.lang.Boolean"/>
+	<field name="pedido_dataPedido" class="java.sql.Date"/>
+	<field name="pedido_desconto" class="java.math.BigDecimal"/>
+	<field name="pedido_hora" class="java.sql.Time"/>
+	<field name="pedido_total" class="java.math.BigDecimal"/>
+	<field name="pedido_valor" class="java.math.BigDecimal"/>
+	<field name="pedido_formaPagamento_id" class="java.lang.Long"/>
+	<field name="pedido_id" class="java.lang.Long"/>
+	<field name="empresa_nomeFantasia" class="java.lang.String"/>
+	<field name="usuario_usuario" class="java.lang.String"/>
+	<field name="formapagamento_formaPagamento" class="java.lang.String"/>
+	<field name="pessoa_nomeRazao" class="java.lang.String"/>
+	<field name="pedido_empresa_id" class="java.lang.Long"/>
+	<variable name="pedido_total_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{pedido_total}]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="54">
+			<image>
+				<reportElement x="0" y="0" width="202" height="53" uuid="6ec7c729-ef97-480b-94ad-a9de548185b1"/>
+				<imageExpression><![CDATA["logoab.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="369" y="20" width="185" height="20" uuid="eb16b89c-84d6-4f58-9129-3461aeb13fb0"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Pedidos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="66">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="7634f1ff-8943-4cf1-bd75-28b7218121ff"/>
+			</line>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement mode="Opaque" x="-20" y="0" width="595" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="3fd2a784-653d-40fe-82a6-57037255706f"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PEDIDOS " + ($F{pedido_aberto} ? "EM ABERTO" : "FECHADOS" )]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-20" y="65" width="595" height="1" forecolor="#666666" uuid="fe641c65-0f90-4aa5-8887-cd4c78195067"/>
+			</line>
+			<staticText>
+				<reportElement x="317" y="52" width="47" height="13" uuid="ba7e1572-a270-4650-aaf1-d9755420c3a8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Usuário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="447" y="52" width="108" height="13" uuid="b0b65032-3f5c-44fa-aa68-b86c6f58e0aa"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Frm. de Pagamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="52" width="28" height="13" uuid="719eab8f-73ce-41da-9957-ab0d7b4345fc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="32" y="52" width="145" height="13" uuid="f5bd3310-6a5b-4db3-b953-f73f8793e8f0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="52" width="64" height="14" uuid="d1362e5d-aa77-4440-9cc8-035921bcf00d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="52" width="72" height="13" uuid="22e31609-dc9f-4a94-8580-a82f7fdf521c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Filial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="52" width="64" height="14" uuid="a213ba06-0fa3-492d-9402-bebca1dd5c6e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="21" width="52" height="20" uuid="00aae63c-e561-4290-8c4c-9755ad075a33"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dtInicial}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="70" y="21" width="84" height="20" uuid="43619acb-c85c-4069-a25d-694046927773"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dtFinal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="54" y="21" width="14" height="20" uuid="dd8d60d4-47c8-48ff-ad95-fbb97765d450"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[até]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Immediate">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="181" y="0" width="64" height="16" uuid="83f41c8c-a183-4b2d-bc1e-31dcfd829c0d"/>
+				<textFieldExpression><![CDATA[$F{pedido_total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="249" y="0" width="64" height="16" uuid="74e9e076-faca-4599-960f-d9dca92ff6d9"/>
+				<textFieldExpression><![CDATA[$F{pedido_dataPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="317" y="0" width="47" height="16" uuid="4061d08e-24d6-4d2a-a68a-34ff200020ec"/>
+				<textFieldExpression><![CDATA[$F{usuario_usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="0" width="72" height="16" uuid="d6b24016-9197-4fd0-929c-6432208b02fd"/>
+				<textFieldExpression><![CDATA[$F{empresa_nomeFantasia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="447" y="0" width="108" height="16" uuid="857f19c1-eca7-41b1-9546-5433806d65e7"/>
+				<textFieldExpression><![CDATA[$F{formapagamento_formaPagamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="0" width="145" height="16" uuid="e6a74fb3-9af6-498d-bc26-2ae67cafdb66"/>
+				<textFieldExpression><![CDATA[$F{pessoa_nomeRazao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="28" height="16" uuid="479b10ff-3361-4544-8723-8a7652769267"/>
+				<textFieldExpression><![CDATA[$F{pedido_id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="47" splitType="Prevent">
+			<line>
+				<reportElement x="-20" y="0" width="595" height="1" uuid="dd4edc51-7227-406d-983d-a18c02cb1a9a"/>
+			</line>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="401" y="14" width="153" height="20" uuid="229d6487-28ba-4c57-9ee0-eba89227edd7"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pedido_total_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="331" y="14" width="70" height="20" uuid="63043136-83d9-442d-8576-d0c9b7a46b8b"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Total:]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="17" splitType="Prevent">
+			<textField>
+				<reportElement mode="Opaque" x="-20" y="0" width="535" height="17" backcolor="#E6E6E6" uuid="24ed297f-bf7d-43b2-89b4-f3806569fda9"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="0" width="60" height="17" backcolor="#E6E6E6" uuid="e50e16a7-6310-4bea-b0b8-c24c2105e0b0"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="2" width="146" height="13" uuid="cc30b32f-458e-41b3-9b84-32f561a081f5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["www.absoft.com.br"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

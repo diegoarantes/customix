@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -33,7 +34,21 @@ public class MbRelatorio {
 
     Pedido pedido = new Pedido();
 
+    private Long idEmpresa;
+    private Date dtInicial;
+    private Date dtFinal;
+    private boolean aberto;
+
     public MbRelatorio() {
+    }
+
+    public void relatorioPedidos() throws SQLException, JRException, IOException {
+        HashMap param = new HashMap();
+        param.put("empresa", idEmpresa);
+        param.put("dtInicial", dtInicial);
+        param.put("dtFinal", dtFinal);
+        param.put("aberto", aberto);
+        imprimeRelatorio(param, "pedidos.jasper");
     }
 
     public void relatorioPedido() throws SQLException, JRException, IOException {
@@ -99,6 +114,38 @@ public class MbRelatorio {
 
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
+    }
+
+    public Long getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Long idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    public Date getDtInicial() {
+        return dtInicial;
+    }
+
+    public void setDtInicial(Date dtInicial) {
+        this.dtInicial = dtInicial;
+    }
+
+    public Date getDtFinal() {
+        return dtFinal;
+    }
+
+    public void setDtFinal(Date dtFinal) {
+        this.dtFinal = dtFinal;
+    }
+
+    public boolean isAberto() {
+        return aberto;
+    }
+
+    public void setAberto(boolean aberto) {
+        this.aberto = aberto;
     }
 
 }

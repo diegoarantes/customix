@@ -19,7 +19,7 @@
                             <f:setPropertyActionListener value="#{mbMercado.pedido}" target="#{mbRelatorio.pedido}"/>
                             <f:actionListener binding="#{mbRelatorio.relatorioPedido()}"/>
                         </p:commandButton> 
-                        <p:commandButton value="Relatório" icon="ui-icon-clipboard" >                  
+                        <p:commandButton value="Relatório" icon="ui-icon-clipboard" onclick="PF('relatorio').show()" >                  
                         </p:commandButton> 
                         <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbMercado.excluir()}" update="@form">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir este Pedido?" icon="ui-icon-alert" />
@@ -211,6 +211,41 @@
                     </p:toolbar>
                 </h:form>
             </p:dialog>
+
+            <p:dialog widgetVar="relatorio" header="Relatório de Pedidos" width="380" height="160">
+                <h:form>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Data Inicial:" />
+                        <p:calendar pattern="dd/MM/yyyy" value="#{mbRelatorio.dtInicial}" mask="true" />
+
+                        <p:outputLabel value="Data Final:" />
+                        <p:calendar pattern="dd/MM/yyyy" value="#{mbRelatorio.dtFinal}" mask="true" />
+
+                        <p:outputLabel value="Status:" />
+                        <p:selectOneMenu required="true" value="#{mbRelatorio.aberto}">
+                            <f:selectItem itemLabel="Fechado" itemValue="false"/>
+                            <f:selectItem itemLabel="Em Aberto" itemValue="true" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Empresa:" />
+                        <p:selectOneMenu required="true" value="#{mbRelatorio.idEmpresa}">
+                            <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemLabel="#{emp.nomeFantasia}" itemValue="#{emp.id}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:commandButton value="Gerar Relatório" icon="ui-icon-clipboard" actionListener="#{mbRelatorio.relatorioPedidos()}" ajax="false" onclick="form.target = '_blank'" update="@form" />
+                        </f:facet>
+                        <f:facet name="right">
+                            <p:commandButton icon="ui-icon-closethick" value="Sair" type="button" onclick="PF('relatorio').hide()">
+                                <p:confirm header="Confirmação" message="Deseja realmente cancelar esta operação?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </f:facet>
+                    </p:toolbar>
+                </h:form>
+            </p:dialog>
+
+
+
         </p:layoutUnit>
     </ui:define>
 

@@ -37,12 +37,14 @@
      itempedido.`valorTotal` AS itempedido_valorTotal,
      produto.`sku` AS produto_sku,
      produto.`descricao` AS produto_descricao,
-     unidademedida.`unidade` AS unidademedida_unidade
+     unidademedida.`unidade` AS unidademedida_unidade,
+     formapagamento.`formaPagamento` AS formapagamento_formaPagamento
 FROM
      `empresa` empresa INNER JOIN `pedido` pedido ON empresa.`id` = pedido.`empresa_id`
      INNER JOIN `usuario` usuario ON pedido.`usuario_id` = usuario.`id`
      INNER JOIN `pessoa` pessoa ON pedido.`cliente_id` = pessoa.`id`
      INNER JOIN `itempedido` itempedido ON pedido.`id` = itempedido.`pedido_id`
+     INNER JOIN `formapagamento` formapagamento ON pedido.`formaPagamento_id` = formapagamento.`id`
      INNER JOIN `produto` produto ON itempedido.`produto_id` = produto.`id`
      AND empresa.`id` = produto.`empresa_id`
      INNER JOIN `unidademedida` unidademedida ON produto.`unidadeMedida_id` = unidademedida.`id`
@@ -79,6 +81,7 @@ WHERE
 	<field name="produto_sku" class="java.lang.String"/>
 	<field name="produto_descricao" class="java.lang.String"/>
 	<field name="unidademedida_unidade" class="java.lang.String"/>
+	<field name="formapagamento_formaPagamento" class="java.lang.String"/>
 	<background>
 		<band/>
 	</background>
@@ -237,6 +240,17 @@ WHERE
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Un.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="392" y="72" width="162" height="20" uuid="f2b403b6-2ee4-431f-b0cf-aabf338ff817"/>
+				<textFieldExpression><![CDATA[$F{formapagamento_formaPagamento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="284" y="72" width="108" height="20" uuid="281f3f23-0e6d-4cca-8c0f-5a2ae40693f8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Forma de Pagamento:]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
