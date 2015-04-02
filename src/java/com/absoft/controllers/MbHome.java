@@ -16,6 +16,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.CategoryAxis;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 
 /**
@@ -40,13 +44,13 @@ public class MbHome {
 
     @EJB
     DAOGenerico dao;
-    
+
     private LineChartModel graficoFaturamento;
 
     public MbHome() {
     }
-    
-     @PostConstruct
+
+    @PostConstruct
     public void init() {
         createLineModels();
     }
@@ -174,12 +178,36 @@ public class MbHome {
     }
 
     private void createLineModels() {
- 
+        graficoFaturamento = initCategoryModel();
+        graficoFaturamento.setTitle("Faturamento ultimos 5 dias");
+        graficoFaturamento.setLegendPosition("e");
+        graficoFaturamento.setShowPointLabels(true);
+        graficoFaturamento.getAxes().put(AxisType.X, new CategoryAxis("Dias"));
+        Axis yAxis = graficoFaturamento.getAxis(AxisType.Y);
+        yAxis.setLabel("Valor");
+        yAxis.setMin(0);
+        yAxis.setMax(3000);
     }
 
+    private LineChartModel initCategoryModel() {
 
-    
-    
-    
-    
+        LineChartModel model = new LineChartModel();
+
+        List<Empresa> empresas = dao.lista(Empresa.class);
+
+        for (Empresa emp : empresas) {
+            ChartSeries cSer = new ChartSeries();
+            cSer.setLabel(emp.getNomeFantasia());
+            cSer.set(getDia1(), faturamento1(emp));
+            cSer.set(getDia2(), faturamento2(emp));
+            cSer.set(getDia3(), faturamento3(emp));
+            cSer.set(getDia4(), faturamento4(emp));
+            cSer.set(getDia5(), faturamento5(emp));
+
+            model.addSeries(cSer);
+        }
+
+        return model;
+    }
+
 }
