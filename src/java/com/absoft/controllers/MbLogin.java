@@ -2,6 +2,7 @@ package com.absoft.controllers;
 
 import com.absoft.converters.ConverterSHA1;
 import com.absoft.dao.DAOGenerico;
+import com.absoft.entities.Permissao;
 import com.absoft.entities.Usuario;
 import com.absoft.util.Mensagem;
 import java.util.List;
@@ -46,6 +47,12 @@ public class MbLogin {
             //Adiciona o usuário logado na sessão
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", usu);
 
+            //Lista de Permissões do usuário
+            List<Permissao> permissoes = dao.listaCondicao(Permissao.class, "perfil.id = " + usu.getPerfil().getId().toString());
+
+            //Adiciona a Lista de Permissões á sessão
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("prms", permissoes);
+
             //Verifica se o usuário está usando a senha padrão
             if (usu.getSenha().equals(ConverterSHA1.cipher("mudar.123"))) {
                 msg.retornaAdvertencia("Você esta usando a senha padrão!");
@@ -79,6 +86,21 @@ public class MbLogin {
 
     public Usuario usuarioLogado() {
         return (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+    }
+
+    public boolean verificaPermissao(String permissao) {
+        boolean permitido = false;
+        List<Permissao> permissoes = (List<Permissao>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("prms");
+
+        for (Permissao per : permissoes) {
+            if (per.getCodPermissao().equals(permissao) || per.getCodPermissao().equals("sysAll")) {
+                permitido = true;
+                break;
+            } else {
+                permitido = false;
+            }
+        }
+        return permitido;
     }
 
     /* GETTERS E SETTERS */

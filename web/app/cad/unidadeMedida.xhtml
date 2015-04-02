@@ -12,9 +12,9 @@
                 <p:growl id="msg"/>
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbUnidadeMedida.novo()}" update=":formDialog"/> 
-                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbUnidadeMedida.editar()}" update="msg, :formDialog"/> 
-                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbUnidadeMedida.excluir()}" update="@form">
+                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbUnidadeMedida.novo()}" update=":formDialog" disabled="#{! mbLogin.verificaPermissao('ediUni')}"/> 
+                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbUnidadeMedida.editar()}" update="msg, :formDialog" disabled="#{! mbLogin.verificaPermissao('ediUni')}"/> 
+                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbUnidadeMedida.excluir()}" update="@form" disabled="#{! mbLogin.verificaPermissao('ediUni')}">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir esta Unidade de Medida?" icon="ui-icon-alert" />
                         </p:commandButton> 
 

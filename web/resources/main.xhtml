@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>ABSOFT - BASE</title>
+        <title>CUSTOMIX 0.9</title>
         <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/favicon.png"/>
         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/estilos.css"/>
 
@@ -40,25 +40,25 @@
                         <p:submenu label="Cadastros" icon="ui-icon-document">
                             <p:column>
                                 <p:submenu label="Cadastros">
-                                    <p:menuitem value="Produtos" action="/app/cad/produtos.jsf" ajax="false"/>
-                                    <p:menuitem value="Pessoas" action="/app/cad/pessoas.jsf" ajax="false"/>
+                                    <p:menuitem value="Produtos" action="/app/cad/produtos.jsf" ajax="false" disabled="#{! mbLogin.verificaPermissao('cadPro')}"/>
+                                    <p:menuitem value="Pessoas" action="/app/cad/pessoas.jsf" ajax="false" disabled="#{! mbLogin.verificaPermissao('cadPes')}"/>
                                 </p:submenu>
                             </p:column>
 
                             <p:column>
                                 <p:submenu label="Cadastros Auxiliares">
-                                    <p:menuitem value="Categoria" action="/app/cad/categorias.jsf" ajax="false"/>
-                                    <p:menuitem value="Unidade de Medida" action="/app/cad/unidadeMedida.jsf" ajax="false"/>
+                                    <p:menuitem value="Categoria" action="/app/cad/categorias.jsf" ajax="false" disabled="#{! mbLogin.verificaPermissao('cadCat')}"/>
+                                    <p:menuitem value="Unidade de Medida" action="/app/cad/unidadeMedida.jsf" ajax="false" disabled="#{! mbLogin.verificaPermissao('cadUni')}"/>
                                     <p:separator/>
-                                    <p:menuitem value="Forma de Pagamento" action="/app/cad/formaPagamento.jsf" ajax="false"/>
+                                    <p:menuitem value="Forma de Pagamento" action="/app/cad/formaPagamento.jsf" ajax="false" disabled="#{! mbLogin.verificaPermissao('cadFrp')}"/>
                                 </p:submenu>
                             </p:column>
 
                         </p:submenu>
 
-                        <p:menuitem value="Comercial" icon="ui-icon-cart" action="/app/comercial.jsf" ajax="false"/>
+                        <p:menuitem value="Comercial" icon="ui-icon-cart" action="/app/comercial.jsf" ajax="false" disabled="#{! mbLogin.verificaPermissao('cadCom')}"/>
 
-                        <p:submenu label="Configurações" icon="ui-icon-gear">                             
+                        <p:submenu label="Configurações" icon="ui-icon-gear" rendered="#{mbLogin.verificaPermissao('sysAll')}">                             
                             <p:column>
                                 <p:submenu label="Sistema">
                                     <p:menuitem value="Empresas" icon="ui-icon-suitcase" action="/app/conf/empresas.jsf" ajax="false" />
@@ -88,7 +88,7 @@
                         <f:facet name="options"> 
 
                             <p:menuButton value="#{mbLogin.usuarioLogado().getUsuario()}" iconPos="right" style="margin: 5px 0px 0px;">
-                                <p:menuitem value="Informações do Usuário" icon="ui-icon-person" action="/app/user/infoUsuario.jsf"/>
+                                <p:menuitem value="Informações do Usuário" icon="ui-icon-person" action="/app/user/infoUsuario.jsf" ajax="false"/>
                                 <p:menuitem value="Sair" icon="ui-icon-extlink" action="#{mbLogin.efetuarLogout()}" ajax="false"/>
                             </p:menuButton>
                         </f:facet>  

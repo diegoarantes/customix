@@ -12,9 +12,9 @@
                 <p:growl id="msg"/>
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbFormaPagamento.novo()}" update=":formDialog"/> 
-                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbFormaPagamento.editar()}" update="msg, :formDialog"/> 
-                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbFormaPagamento.excluir()}" update="@form">
+                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbFormaPagamento.novo()}" update=":formDialog" disabled="#{! mbLogin.verificaPermissao('ediFrp')}"/> 
+                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbFormaPagamento.editar()}" update="msg, :formDialog" disabled="#{! mbLogin.verificaPermissao('ediFrp')}"/> 
+                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbFormaPagamento.excluir()}" update="@form" disabled="#{! mbLogin.verificaPermissao('ediFrp')}">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir esta Forma de Pagamento?" icon="ui-icon-alert" />
                         </p:commandButton> 
 

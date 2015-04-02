@@ -37,16 +37,19 @@ public class Usuario implements Serializable {
 
     @NotNull
     private boolean ativo;
-    
+
     @NotNull
     @ManyToOne
     private Perfil perfil;
 
+    @ManyToOne
+    private Empresa empresa;
+
     public Usuario() {
         perfil = new Perfil();
+        empresa = new Empresa();
     }
 
-    
     public Long getId() {
         return id;
     }
@@ -103,7 +106,14 @@ public class Usuario implements Serializable {
         this.perfil = perfil;
     }
 
-    
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

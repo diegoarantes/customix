@@ -8,6 +8,7 @@ import com.absoft.entities.Produto;
 import com.absoft.util.Mensagem;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,15 +33,23 @@ public class MbMercado implements Serializable {
     private List<Pedido> pedidos = new ArrayList<>();
 
     private List<Pessoa> clientes = new ArrayList<>();
-    
+
     private List<Produto> produtos = new ArrayList<>();
 
     Mensagem msg = new Mensagem();
+
+    //Filtro
+    private Long idEmpresa;
+    private Date dtInicial;
+    private Date dtFinal;
 
     @EJB
     DAOGenerico dao;
 
     public MbMercado() {
+        idEmpresa = new MbLogin().usuarioLogado().getEmpresa().getId();
+        dtInicial = new Date();
+        dtFinal = new Date();
     }
 
     public void novo() {
@@ -48,20 +57,25 @@ public class MbMercado implements Serializable {
         pedido.setDesconto(BigDecimal.ZERO);
         pedido.setTotal(BigDecimal.ZERO);
         pedido.setValor(BigDecimal.ZERO);
-        
+
         pedido.setUsuario(new MbLogin().usuarioLogado());
-        
+
         itemPedido = new ItemPedido();
 
         itemPedido.setQuantidade(BigDecimal.ONE);
         itemPedido.setDesconto(BigDecimal.ZERO);
         itensPedido.clear();
+
+        pedido.setEmpresa(new MbLogin().usuarioLogado().getEmpresa());
+
         org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
     }
 
     public void editar() {
         if (pedido == null) {
             msg.retornaAdvertencia("Selecione um pedido!");
+        } else if (!pedido.isAberto() && !new MbLogin().verificaPermissao("alfCom")) {
+            msg.retornaAdvertencia("Você não tem Permissão para alterar um pedido fechado!");
         } else {
             itemPedido = new ItemPedido();
             itemPedido.setQuantidade(BigDecimal.ONE);
@@ -72,13 +86,22 @@ public class MbMercado implements Serializable {
         }
     }
 
+    public void fecharVenda() {
+        if (pedido == null) {
+            msg.retornaAdvertencia("Selecione um pedido!");
+        } else {
+            pedido.setAberto(false);
+            dao.atualizar(pedido);
+            msg.retornaInfo("Venda fechada com sucesso!");
+        }
+    }
+
     public void gravar() {
         if (!itensPedido.isEmpty()) {
             if (pedido.getId() == null) {
                 pedido.setDataPedido(new Date());
                 pedido.setHora(new Date());
-                pedido.setAberto(false);
-                
+                pedido.setAberto(true);
 
                 dao.inserir(pedido);
                 gravaItens();
@@ -229,7 +252,14 @@ public class MbMercado implements Serializable {
     }
 
     public List<Pedido> getPedidos() {
-        return dao.lista(Pedido.class);
+        SimpleDateFormat formDt = new SimpleDateFormat("yyyy-MM-dd");
+        if (idEmpresa == null) {
+            return dao.listaCondicao(Pedido.class, "dataPedido BETWEEN '" + formDt.format(dtInicial) + "' AND '" + formDt.format(dtFinal) + "'");
+        } else {
+            return dao.listaCondicao(Pedido.class, "empresa.id = " + idEmpresa.toString()
+                    + " AND dataPedido BETWEEN '" + formDt.format(dtInicial) + "' AND '" + formDt.format(dtFinal) + "'");
+        }
+
     }
 
     public void setPedidos(List<Pedido> pedidos) {
@@ -252,14 +282,36 @@ public class MbMercado implements Serializable {
         this.produtos = produtos;
     }
 
-    
-    
     public ItemPedido getItemSelecionado() {
         return itemSelecionado;
     }
 
     public void setItemSelecionado(ItemPedido itemSelecionado) {
         this.itemSelecionado = itemSelecionado;
+    }
+
+    public Long getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Long idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    public Date getDtInicial() {
+        return dtInicial;
+    }
+
+    public void setDtInicial(Date dtInicial) {
+        this.dtInicial = dtInicial;
+    }
+
+    public Date getDtFinal() {
+        return dtFinal;
+    }
+
+    public void setDtFinal(Date dtFinal) {
+        this.dtFinal = dtFinal;
     }
 
 }

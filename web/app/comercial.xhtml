@@ -13,20 +13,20 @@
                 <p:growl id="msg"/>
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbMercado.novo()}" update=":formDialog"/> 
-                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbMercado.editar()}" update="msg, :formDialog"/> 
+                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbMercado.novo()}" update=":formDialog" disabled="#{! mbLogin.verificaPermissao('impCom')}"/> 
+                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbMercado.editar()}" update="msg, :formDialog" disabled="#{! mbLogin.verificaPermissao('altCom')}"/> 
                         <p:commandButton value="Imprimir" icon="ui-icon-print" ajax="false" onclick="form.target = '_blank'">
                             <f:setPropertyActionListener value="#{mbMercado.pedido}" target="#{mbRelatorio.pedido}"/>
                             <f:actionListener binding="#{mbRelatorio.relatorioPedido()}"/>
                         </p:commandButton> 
-                        <p:commandButton value="Relatório" icon="ui-icon-clipboard" onclick="PF('relatorio').show()" >                  
-                        </p:commandButton> 
-                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbMercado.excluir()}" update="@form">
+                        <p:commandButton value="Relatório" icon="ui-icon-clipboard" onclick="PF('relatorio').show()" disabled="#{! mbLogin.verificaPermissao('relCom')}" />                 
+                        <p:commandButton value="Fechar Venda" icon="ui-icon-locked" actionListener="#{mbMercado.fecharVenda()}" update="@form" disabled="#{! mbLogin.verificaPermissao('fecCom')}">
+                            <p:confirm header="Confirmação" message="Deseja realmente Fechar este Pedido?" icon="ui-icon-alert"  />
+                        </p:commandButton>                 
+
+                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbMercado.excluir()}" update="@form" disabled="#{! mbLogin.verificaPermissao('excCom')}">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir este Pedido?" icon="ui-icon-alert" />
                         </p:commandButton> 
-
-
-
                     </f:facet>
                     <f:facet name="right">
                         <p:commandButton icon="ui-icon-info" title="Informações" id="info"/>
@@ -37,8 +37,23 @@
                     <h:outputText value="TESTE INFORMAÇÕES" />
                 </p:overlayPanel>
 
+                <h:panelGrid columns="4">
+                    <p:calendar id="dataInicial" value="#{mbMercado.dtInicial}"  size="10">
+                        <p:ajax event="blur" update="tblPedidos" process="@this, dataFinal, empresaBusca"/>
+                    </p:calendar>
+                    <p:calendar id="dataFinal" value="#{mbMercado.dtFinal}" size="10">
+                        <p:ajax event="blur" update="tblPedidos" process="@this, dataInicial, empresaBusca"/>
+                    </p:calendar>
+                    <p:outputLabel value="Empresa:" />
+                    <p:selectOneMenu id="empresaBusca" value="#{mbMercado.idEmpresa}" disabled="#{! mbLogin.verificaPermissao('empCom')}">
+                        <f:selectItem itemLabel="Todas" noSelectionOption="true" itemValue="#{null}"/>
+                        <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemLabel="#{emp.nomeFantasia}" itemValue="#{emp.id}"/>
+                        <p:ajax update="tblPedidos"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
 
-                <p:dataTable widgetVar="tabelaPedidos" value="#{mbMercado.pedidos}" var="pedido" selectionMode="single" selection="#{mbMercado.pedido}" rowKey="#{pedido.id}"  emptyMessage="Não há itens.">
+
+                <p:dataTable widgetVar="tabelaPedidos" id="tblPedidos" value="#{mbMercado.pedidos}" var="pedido" selectionMode="single" selection="#{mbMercado.pedido}" rowKey="#{pedido.id}"  emptyMessage="Não há itens.">
                     <p:column headerText="ID" width="30">
                         #{pedido.id}
                     </p:column>
@@ -53,7 +68,7 @@
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Status" width="80" filterBy="#{pedido.aberto}" filterMatchMode="exact">
+                    <p:column headerText="Status" width="85" filterBy="#{pedido.aberto}" filterMatchMode="exact">
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('tabelaPedidos').filter()" >
                                 <f:selectItem itemLabel="Sel. Status" itemValue="#{null}" noSelectionOption="true" />
@@ -95,7 +110,7 @@
                         <p:inputText value="#{mbMercado.pedido.usuario.usuario}" readonly="true" style="background-color: #F5F5F5" size="10"/>
 
                         <p:outputLabel  value="Empresa: " />
-                        <p:selectOneMenu value="#{mbMercado.pedido.empresa.id}" required="true" style="width: 130px">
+                        <p:selectOneMenu value="#{mbMercado.pedido.empresa.id}" required="true" style="width: 130px" disabled="#{! mbLogin.verificaPermissao('empCom')}">
                             <f:selectItem itemLabel="Sel. uma empresa." noSelectionOption="true"/>
                             <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemLabel="#{emp.nomeFantasia}" itemValue="#{emp.id}"/>
                             <p:ajax update="Produto"/>

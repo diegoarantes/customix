@@ -12,11 +12,11 @@
                 <p:growl id="msg"/>
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbProduto.novo()}" update=":formDialog"/> 
-                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbProduto.editar()}" update="msg, :formDialog"/> 
-                        <p:commandButton value="Copiar produto" icon="ui-icon-copy" actionListener="#{mbProduto.copiar()}" update="msg, :formDialog"/> 
-                        <p:commandButton value="Transferir Estoque" icon="ui-icon-transferthick-e-w" update="msg, :formDialog"/> 
-                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbProduto.excluir()}" update="@form">
+                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbProduto.novo()}" update=":formDialog" disabled="#{! mbLogin.verificaPermissao('ediPro')}"/> 
+                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbProduto.editar()}" update="msg, :formDialog" disabled="#{! mbLogin.verificaPermissao('ediPro')}"/> 
+                        <p:commandButton value="Copiar produto" icon="ui-icon-copy" actionListener="#{mbProduto.copiar()}" update="msg, :formDialog" disabled="#{! mbLogin.verificaPermissao('ediPro')}"/> 
+                        <p:commandButton value="Transferir Estoque" icon="ui-icon-transferthick-e-w"   actionListener="#{mbProduto.transferenciaEstoque()}" update="msg, :formDialogT" disabled="#{! mbLogin.verificaPermissao('ediPro')}"/> 
+                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbProduto.excluir()}" update="@form" disabled="#{! mbLogin.verificaPermissao('ediPro')}">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir este Produto?" icon="ui-icon-alert" />
                         </p:commandButton> 
 
@@ -143,6 +143,42 @@
                         </f:facet>
                         <f:facet name="right">
                             <p:commandButton icon="ui-icon-closethick" value="Sair" type="button" onclick="PF('dialogo').hide()" update=":formPrincipal">
+                                <p:confirm header="Confirmação" message="Deseja realmente cancelar esta operação?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </f:facet>
+                    </p:toolbar>
+                </h:form>
+            </p:dialog>
+
+            <p:dialog widgetVar="transfEstoque" header="Transferência de Estoque" width="380" height="230">
+                <h:form id="formDialogT">
+                    <h:outputLabel value=" Assegure-se de que o item selecionado na outra filial tenha um SKU correspondente !" style="color: red"/>
+                    <h:panelGrid columns="2">
+                        Filial: <p:inputText readonly="true" value="#{mbProduto.produto.empresa.nomeFantasia}"/>
+                        Produto: <p:inputText readonly="true" value="#{mbProduto.produto.descricao}"/>
+                        Qtd. Disponível: <p:inputText readonly="true" value="#{mbProduto.produto.estoque}">
+                            <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                        </p:inputText>                        
+                    </h:panelGrid>
+                    <p:separator />
+                    <h:panelGrid columns="2">
+                        Filial Destino: 
+                        <p:selectOneMenu value="#{mbProduto.idEmpresaDestino}" required="true">
+                            <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemLabel="#{emp.nomeFantasia}" itemValue="#{emp.id}"/>
+                        </p:selectOneMenu>
+
+                        Qtd. Transf.: <p:inputText value="#{mbProduto.qtdTransferir}" size="6" required="true">
+                            <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
+                        </p:inputText>
+
+                    </h:panelGrid>
+
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <p:commandButton value="Transferir" icon="ui-icon-transferthick-e-w" actionListener="#{mbProduto.transferir()}" update=":formPrincipal" />
+                        </f:facet>
+                        <f:facet name="right">
+                            <p:commandButton icon="ui-icon-closethick" value="Sair" type="button" onclick="PF('transfEstoque').hide()">
                                 <p:confirm header="Confirmação" message="Deseja realmente cancelar esta operação?" icon="ui-icon-alert" />
                             </p:commandButton>
                         </f:facet>

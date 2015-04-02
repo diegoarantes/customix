@@ -12,9 +12,9 @@
                 <p:growl id="msg"/>
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbPessoa.novo()}" update=":formDialog"/> 
-                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbPessoa.editar()}" update="msg, :formDialog"/> 
-                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbPessoa.excluir()}" update="@form">
+                        <p:commandButton value="Novo" icon="ui-icon-plus" actionListener="#{mbPessoa.novo()}" update=":formDialog" disabled="#{! mbLogin.verificaPermissao('ediPes')}"/> 
+                        <p:commandButton value="Editar" icon="ui-icon-pencil" actionListener="#{mbPessoa.editar()}" update="msg, :formDialog" disabled="#{! mbLogin.verificaPermissao('ediPes')}"/> 
+                        <p:commandButton value="Excluir" icon="ui-icon-closethick" actionListener="#{mbPessoa.excluir()}" update="@form" disabled="#{! mbLogin.verificaPermissao('ediPes')}">
                             <p:confirm header="Confirmação" message="Deseja realmente excluir esta Pessoa?" icon="ui-icon-alert" />
                         </p:commandButton> 
 

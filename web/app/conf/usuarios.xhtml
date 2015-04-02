@@ -51,11 +51,14 @@
                     <p:column headerText="E-Mail">
                         #{usuario.email}
                     </p:column>
+                    <p:column headerText="Empresa padrão">
+                        #{usuario.empresa.nomeFantasia}
+                    </p:column>
                 </p:dataTable>
             </h:form>
 
 
-            <p:dialog widgetVar="dialogo" header="Usuário [Edição]" width="380" height="200">
+            <p:dialog widgetVar="dialogo" header="Usuário [Edição]" width="380" height="230">
                 <h:form id="formDialog">
                     <h:panelGrid columns="2">
                         <p:column/>
@@ -71,6 +74,12 @@
                         <h:outputLabel value="Perfil: "/>
                         <p:selectOneMenu value="#{mbUsuario.usuario.perfil.id}">
                             <f:selectItems value="#{mbPermissao.perfis}" var="perfil" itemLabel="#{perfil.perfil}" itemValue="#{perfil.id}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel  value="Empresa: " />
+                        <p:selectOneMenu value="#{mbUsuario.usuario.empresa.id}" required="true" style="width: 130px" disabled="#{! mbLogin.verificaPermissao('empCom')}">
+                            <f:selectItem itemLabel="Sel. uma empresa." noSelectionOption="true"/>
+                            <f:selectItems value="#{mbEmpresa.empresas}" var="emp" itemLabel="#{emp.nomeFantasia}" itemValue="#{emp.id}"/>
                         </p:selectOneMenu>
 
                         <h:outputLabel value="Usuário: "/>
