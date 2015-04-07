@@ -101,7 +101,7 @@ public class MbMercado implements Serializable {
             if (pedido.getId() == null) {
                 pedido.setDataPedido(new Date());
                 pedido.setHora(new Date());
-                pedido.setAberto(true);
+                pedido.setAberto(false);//O correto é true
 
                 dao.inserir(pedido);
                 gravaItens();
