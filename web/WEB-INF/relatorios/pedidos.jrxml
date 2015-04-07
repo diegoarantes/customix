@@ -36,11 +36,11 @@ FROM
      INNER JOIN `usuario` usuario ON pedido.`usuario_id` = usuario.`id`
      INNER JOIN `formapagamento` formapagamento ON pedido.`formaPagamento_id` = formapagamento.`id`
 WHERE
-pedido.`empresa_id` = $P{empresa}
+     pedido.`empresa_id` = $P{empresa}
 AND
-pedido.`aberto` = $P{aberto}
+     pedido.`aberto` = $P{aberto}
 AND
-pedido.`dataPedido` BETWEEN $P{dtInicial} AND $P{dtFinal}]]>
+     pedido.`dataPedido` BETWEEN $P{dtInicial} AND $P{dtFinal}]]>
 	</queryString>
 	<field name="pedido_aberto" class="java.lang.Boolean"/>
 	<field name="pedido_dataPedido" class="java.sql.Date"/>
@@ -57,6 +57,12 @@ pedido.`dataPedido` BETWEEN $P{dtInicial} AND $P{dtFinal}]]>
 	<field name="pedido_empresa_id" class="java.lang.Long"/>
 	<variable name="pedido_total_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{pedido_total}]]></variableExpression>
+	</variable>
+	<variable name="totalCartao" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[($F{formapagamento_formaPagamento}.equals("CARTÃO DE CRÉDITO") ? $F{pedido_total} : new BigDecimal("0"))]]></variableExpression>
+	</variable>
+	<variable name="totalDinheiro" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[($F{formapagamento_formaPagamento}.equals("Á VISTA") ? $F{pedido_total} : new BigDecimal("0"))]]></variableExpression>
 	</variable>
 	<background>
 		<band/>
@@ -198,18 +204,42 @@ pedido.`dataPedido` BETWEEN $P{dtInicial} AND $P{dtFinal}]]>
 				<reportElement x="-20" y="0" width="595" height="1" uuid="dd4edc51-7227-406d-983d-a18c02cb1a9a"/>
 			</line>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="401" y="14" width="153" height="20" uuid="229d6487-28ba-4c57-9ee0-eba89227edd7"/>
-				<textElement>
+				<reportElement x="401" y="18" width="153" height="20" uuid="229d6487-28ba-4c57-9ee0-eba89227edd7"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{pedido_total_1}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="331" y="14" width="70" height="20" uuid="63043136-83d9-442d-8576-d0c9b7a46b8b"/>
-				<textElement>
+				<reportElement x="317" y="18" width="84" height="20" uuid="63043136-83d9-442d-8576-d0c9b7a46b8b"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Valor Total:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="36" y="18" width="100" height="20" uuid="7bad4e42-c704-4e33-bae5-e50c9389887a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalCartao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="18" width="36" height="20" uuid="c69b9292-3d4d-4ff5-b8e7-40b7f21e1058"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Cartão:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="202" y="18" width="81" height="20" uuid="5a0091b4-4623-43e7-aeaa-a79b8dd18294"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalDinheiro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="154" y="18" width="48" height="20" uuid="b22b0066-91a6-40a5-a706-8a100b7bf8fd"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Dinheiro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="18" uuid="5a8803c8-39d1-4850-91df-dcaf5d721394"/>
+				<text><![CDATA[TOTAIS:]]></text>
 			</staticText>
 		</band>
 	</columnFooter>
