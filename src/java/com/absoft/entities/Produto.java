@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * @author Diego Arantes
  */
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "produto", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"sku", "empresa_id"}, name = "produtoEmpresas")}
 //Define que o valor das colunas juntas devem ser único ex: 1 e 1 nao podera repetir 1 e 1 em outro registro
 //Trava para não ter o produto com o mesmo sku na mesma empresa

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
  * @author Diego Arantes
  */
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "permissao" ,uniqueConstraints = {
     @UniqueConstraint(columnNames = {"codPermissao", "perfil_id"}, name = "vinculosPerfil")}
 )//Define que o valor das colunas juntas devem ser único ex: 1 e 1 nao podera repetir 1 e 1 em outro registro)
 public class Permissao implements Serializable {
