@@ -24,53 +24,53 @@ import org.primefaces.context.RequestContext;
 @Named(value = "mbMercado")
 @SessionScoped
 public class MbMercado implements Serializable {
-
+    
     private Pedido pedido = new Pedido();
     private ItemPedido itemPedido = new ItemPedido();
     private ItemPedido itemSelecionado = new ItemPedido();
-
+    
     private List<ItemPedido> itensPedido = new ArrayList<>();
     private List<Pedido> pedidos = new ArrayList<>();
-
+    
     private List<Pessoa> clientes = new ArrayList<>();
-
+    
     private List<Produto> produtos = new ArrayList<>();
-
+    
     Mensagem msg = new Mensagem();
 
     //Filtro
     private Long idEmpresa;
     private Date dtInicial;
     private Date dtFinal;
-
+    
     @EJB
     DAOGenerico dao;
-
+    
     public MbMercado() {
         idEmpresa = new MbLogin().usuarioLogado().getEmpresa().getId();
         dtInicial = new Date();
         dtFinal = new Date();
     }
-
+    
     public void novo() {
         pedido = new Pedido();
         pedido.setDesconto(BigDecimal.ZERO);
         pedido.setTotal(BigDecimal.ZERO);
         pedido.setValor(BigDecimal.ZERO);
-
+        
         pedido.setUsuario(new MbLogin().usuarioLogado());
-
+        
         itemPedido = new ItemPedido();
-
+        
         itemPedido.setQuantidade(BigDecimal.ONE);
         itemPedido.setDesconto(BigDecimal.ZERO);
         itensPedido.clear();
-
+        
         pedido.setEmpresa(new MbLogin().usuarioLogado().getEmpresa());
-
+        
         org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
     }
-
+    
     public void editar() {
         if (pedido == null) {
             msg.retornaAdvertencia("Selecione um pedido!");
@@ -80,12 +80,12 @@ public class MbMercado implements Serializable {
             itemPedido = new ItemPedido();
             itemPedido.setQuantidade(BigDecimal.ONE);
             itemPedido.setDesconto(BigDecimal.ZERO);
-
+            
             itensPedido = dao.listaCondicao(ItemPedido.class, "pedido.id = " + pedido.getId().toString()); // Recupera a lista de itens
             org.primefaces.context.RequestContext.getCurrentInstance().execute("PF('dialogo').show()"); //Abre o dialogo
         }
     }
-
+    
     public void fecharVenda() {
         if (pedido == null) {
             msg.retornaAdvertencia("Selecione um pedido!");
@@ -95,7 +95,7 @@ public class MbMercado implements Serializable {
             msg.retornaInfo("Venda fechada com sucesso!");
         }
     }
-
+    
     public void gravar() {
         if (!itensPedido.isEmpty()) {
             if (pedido.getId() == null) {
@@ -105,7 +105,7 @@ public class MbMercado implements Serializable {
 
                 dao.inserir(pedido);
                 gravaItens();
-
+                
                 msg.retornaInfo("Pedido cadastrado com sucesso!");
             } else {
                 atualizaItens();
@@ -120,9 +120,9 @@ public class MbMercado implements Serializable {
         } else {
             msg.retornaAdvertencia("O pedido está vazio, é necessário adicionar itens para gravar.");
         }
-
+        
     }
-
+    
     private void gravaItens() {
         for (ItemPedido pro : itensPedido) {
             pro.setPedido(pedido);
@@ -130,7 +130,7 @@ public class MbMercado implements Serializable {
             dao.inserir(pro);
         }
     }
-
+    
     private void atualizaItens() {
         try {
             List<ItemPedido> itensPedidoBanco = dao.listaCondicao(ItemPedido.class, "pedido.id = " + pedido.getId().toString()); // Recupera a lista de itens
@@ -138,25 +138,25 @@ public class MbMercado implements Serializable {
                 estornaItemEstoque(pro.getProduto(), pro.getQuantidade()); //
                 dao.excluir(pro); // Exclui item por item
             }
-
+            
             for (ItemPedido prod : itensPedido) {
                 prod.setId(null);//Anula os IDS
             }
-
+            
         } catch (Exception ex) {
             msg.retornaErro("Erro interno ! \n " + ex.getMessage());
         }
     }
-
+    
     public void excluir() {
         try {
-
+            
             itensPedido = dao.listaCondicao(ItemPedido.class, "pedido.id = " + pedido.getId().toString()); // Recupera a lista de itens
             for (ItemPedido pro : itensPedido) {
                 estornaItemEstoque(pro.getProduto(), pro.getQuantidade());
                 dao.excluir(pro); // Exclui item por item
             }
-
+            
             dao.excluir(pedido);
             msg.retornaInfo("Pedido excluído com sucesso!");
         } catch (Exception ex) {
@@ -165,14 +165,14 @@ public class MbMercado implements Serializable {
         pedido = new Pedido();
         itemPedido = new ItemPedido();
     }
-
+    
     public void recuperaProduto() {
         Produto pro = (Produto) dao.recupera(Produto.class, itemPedido.getProduto().getId());
         itemPedido.setValorItem(pro.getPrecoVenda());
-        itemPedido.setValorTotal(pro.getPrecoVenda().multiply(itemPedido.getQuantidade()));
+        itemPedido.setValorTotal((pro.getPrecoVenda().multiply(itemPedido.getQuantidade())).subtract(itemPedido.getDesconto()));
         itemPedido.setProduto(pro);
     }
-
+    
     public void adicionaItem() {
         boolean existe = false;
         for (ItemPedido pro : itensPedido) {
@@ -181,29 +181,29 @@ public class MbMercado implements Serializable {
                 break;
             }
         }
-
+        
         if (!existe) {//Verifica se este produto já está adicionado
             recuperaProduto();
-
+            
             itensPedido.add(itemPedido);
 
             //Recalcula os itens do pedido
             calculaPedido();
-
+            
             itemPedido = new ItemPedido();
             itemPedido.setQuantidade(BigDecimal.ONE);
             itemPedido.setDesconto(BigDecimal.ZERO);
         } else {
             msg.retornaInfo("Este produto já está adicionado á este pedido!");
         }
-
+        
     }
-
+    
     public void excluirItem() {
         itensPedido.remove(itemSelecionado);
         calculaPedido();
     }
-
+    
     private void calculaPedido() {
         pedido.setDesconto(BigDecimal.ZERO);
         pedido.setTotal(BigDecimal.ZERO);
@@ -214,43 +214,43 @@ public class MbMercado implements Serializable {
             pedido.setValor(pedido.getValor().add(pro.getValorItem()));
         }
     }
-
+    
     private void baixaItemEstoque(Produto prod, BigDecimal quant) {
         Produto produto = (Produto) dao.recupera(Produto.class, prod.getId());
         produto.setEstoque(produto.getEstoque().subtract(quant));
         dao.atualizar(produto);
     }
-
+    
     private void estornaItemEstoque(Produto prod, BigDecimal quant) {
         Produto produto = (Produto) dao.recupera(Produto.class, prod.getId());
         produto.setEstoque(produto.getEstoque().add(quant));
         dao.atualizar(produto);
     }
-
+    
     public Pedido getPedido() {
         return pedido;
     }
-
+    
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
-
+    
     public ItemPedido getItemPedido() {
         return itemPedido;
     }
-
+    
     public void setItemPedido(ItemPedido itemPedido) {
         this.itemPedido = itemPedido;
     }
-
+    
     public List<ItemPedido> getItensPedido() {
         return itensPedido;
     }
-
+    
     public void setItensPedido(List<ItemPedido> itensPedido) {
         this.itensPedido = itensPedido;
     }
-
+    
     public List<Pedido> getPedidos() {
         SimpleDateFormat formDt = new SimpleDateFormat("yyyy-MM-dd");
         if (idEmpresa == null) {
@@ -259,59 +259,59 @@ public class MbMercado implements Serializable {
             return dao.listaCondicao(Pedido.class, "empresa.id = " + idEmpresa.toString()
                     + " AND dataPedido BETWEEN '" + formDt.format(dtInicial) + "' AND '" + formDt.format(dtFinal) + "'");
         }
-
+        
     }
-
+    
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
-
+    
     public List<Pessoa> getClientes() {
         return dao.listaCondicao(Pessoa.class, "cliFor = 'C' OR cliFor = 'A'");
     }
-
+    
     public void setClientes(List<Pessoa> clientes) {
         this.clientes = clientes;
     }
-
+    
     public List<Produto> getProdutos() {
         return dao.listaCondicao(Produto.class, "empresa.id = " + pedido.getEmpresa().getId());
     }
-
+    
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
     }
-
+    
     public ItemPedido getItemSelecionado() {
         return itemSelecionado;
     }
-
+    
     public void setItemSelecionado(ItemPedido itemSelecionado) {
         this.itemSelecionado = itemSelecionado;
     }
-
+    
     public Long getIdEmpresa() {
         return idEmpresa;
     }
-
+    
     public void setIdEmpresa(Long idEmpresa) {
         this.idEmpresa = idEmpresa;
     }
-
+    
     public Date getDtInicial() {
         return dtInicial;
     }
-
+    
     public void setDtInicial(Date dtInicial) {
         this.dtInicial = dtInicial;
     }
-
+    
     public Date getDtFinal() {
         return dtFinal;
     }
-
+    
     public void setDtFinal(Date dtFinal) {
         this.dtFinal = dtFinal;
     }
-
+    
 }

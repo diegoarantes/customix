@@ -143,7 +143,7 @@
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
                         </p:inputText>
 
-                        <p:inputText id="Desconto" value="#{mbMercado.itemPedido.desconto}" size="6" required="true" readonly="true" >
+                        <p:inputText id="Desconto" value="#{mbMercado.itemPedido.desconto}" size="6" required="true" readonly="false" >
                             <f:convertNumber pattern="#,##0.000" minFractionDigits="2"/>
                             <p:ajax listener="#{mbMercado.recuperaProduto()}" event="keyup" process="@this" update="Quantidade, Preco, Total"/>
                         </p:inputText>
